@@ -6,7 +6,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
         <item name="android:textColor">@color/colorTextLight</item>
+        <item name="android:editTextColor">@color/colorTextLight</item>
+        <item name="android:textSize">@dimen/textSize</item>
     </style>
 
     <style name="DefaultButton" parent="Base.TextAppearance.AppCompat.Button">

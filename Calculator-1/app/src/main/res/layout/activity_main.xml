@@ -9,35 +9,43 @@
     tools:ignore="HardcodedText">
 
     <LinearLayout
-        style="@style/Theme.AppCompat.DayNight.NoActionBar"
+        style="@style/AppTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="5dp">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/inputField"
+            android:labelFor="@+id/inputFieldText"
+
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight=".30"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+
             android:ems="10"
             android:inputType="textMultiLine"
-            android:background="@drawable/text_field"
-            android:layout_marginTop="5dp"/>
+            android:background="@drawable/text_field" />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight=".10"
-            android:background="@drawable/text_field"
             android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp">
+            android:layout_marginBottom="7dp"
+            android:background="@drawable/text_field">
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0" />
+                android:layout_gravity="end|center"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp" />
         </HorizontalScrollView>
 
         <TableLayout
@@ -82,7 +90,7 @@
                     style="@style/DefaultButton"
                     android:layout_weight=".2"
                     android:textColor="@color/colorCancel"
-                    android:text="\u2190 " />
+                    android:text="\u232B" />
 
             </TableRow>
 
