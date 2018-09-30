@@ -27,8 +27,8 @@
         <item name="android:textColor">@color/colorOperation</item>
     </style>
 
-    <style name="CancelButton" parent="DefaultButton">
-        <item name="android:textColor">@color/colorCancel</item>
+    <style name="ClearButton" parent="DefaultButton">
+        <item name="android:textColor">@color/colorAttention</item>
     </style>
 
     <style name="TableRow" parent="Theme.AppCompat.DayNight.NoActionBar">

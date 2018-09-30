@@ -4,6 +4,6 @@
     <color name="colorPrimaryDark">#151515</color>
     <color name="colorAccent">#BDBDBD</color>
     <color name="colorTextLight">#E6E6E6</color>
-    <color name="colorCancel">#B40404</color>
+    <color name="colorAttention">#B40404</color>
     <color name="colorOperation">#0040FF</color>
 </resources>
