@@ -32,4 +32,6 @@ class SquaredButton : Button {
         val minDimension = min(measuredWidth, measuredHeight)
         setMeasuredDimension(minDimension, minDimension)
     }
+
+
 }

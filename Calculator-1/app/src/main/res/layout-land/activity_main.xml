@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".MainActivity"
+    tools:ignore="HardcodedText">
+
+    <LinearLayout
+        style="@style/AppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <EditText
+            android:id="@+id/inputField"
+
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_weight=".25"
+            android:background="@drawable/text_field"
+            android:ems="10"
+
+            android:inputType="none"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_weight=".15"
+            android:background="@drawable/text_field">
+
+            <TextView
+                android:id="@+id/resultField"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp" />
+        </HorizontalScrollView>
+
+        <TableLayout
+            android:id="@+id/panel"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight=".60"
+            android:background="@drawable/panel_button"
+            android:paddingBottom="5dp"
+            android:paddingEnd="2dp"
+            android:paddingStart="2dp"
+            android:paddingTop="5dp">
+
+            <TableRow style="@style/TableRow">
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/factorialButton"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="!" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/button7"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="7" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/button8"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="8" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/button9"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="9" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/openingBracketButton"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="(" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/closingBracketButton"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text=")" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/clearButton"
+                    style="@style/ClearButton"
+                    android:layout_weight=".2"
+                    android:text="C" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/backspaceButton"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="\u232B"
+                    android:textColor="@color/colorAttention" />
+
+            </TableRow>
+
+            <TableRow style="@style/TableRow">
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/pointButton"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="." />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/button4"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="4" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/button5"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="5" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/button6"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="6" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/divideButton"
+                    style="@style/OperationButton"
+                    android:layout_weight=".2"
+                    android:text="/" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/minusButton"
+                    style="@style/OperationButton"
+                    android:layout_weight=".2"
+                    android:text="-" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/sqrtButton"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="\u221A" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/otherButton"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="..." />
+            </TableRow>
+
+            <TableRow style="@style/TableRow">
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/button0"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="0" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/button1"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="1" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/button2"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="2" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/button3"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="3" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/plusButton"
+                    style="@style/OperationButton"
+                    android:layout_weight=".2"
+                    android:text="+" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/mulButton"
+                    style="@style/OperationButton"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".2"
+                    android:text="*" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/powButton"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="^" />
+
+                <com.learning.newuserkk.calculator.SquaredButton
+                    android:id="@+id/evaluateButton"
+                    style="@style/DefaultButton"
+                    android:layout_weight=".2"
+                    android:text="=" />
+            </TableRow>
+
+        </TableLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

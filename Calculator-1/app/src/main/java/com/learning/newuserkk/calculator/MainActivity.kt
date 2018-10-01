@@ -11,7 +11,10 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val LOG_TAG = "MainActivity"
+        val CALCULATION_RESULT = MainActivity::class.qualifiedName + ".calculationResult"
     }
+
+    var calculationResult: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +24,9 @@ class MainActivity : AppCompatActivity() {
         setInputButtonListeners()
         setSpecialButtonListeners()
 
+        calculationResult = savedInstanceState?.getString(CALCULATION_RESULT)
+        resultField.text = calculationResult
+
         // TODO: exceptions
         // TODO: fix markup for some dimensions
         // TODO: fix mod
@@ -28,6 +34,11 @@ class MainActivity : AppCompatActivity() {
         // TODO: add log
         // TODO: add module
         // TODO: add trigonometry
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putString(CALCULATION_RESULT, calculationResult)
+        super.onSaveInstanceState(outState)
     }
 
     private fun setInputButtonListeners() {
@@ -49,13 +60,10 @@ class MainActivity : AppCompatActivity() {
         minusButton.setOnClickListener { addTextOnSelection("-") }
         plusButton.setOnClickListener { addTextOnSelection("+") }
 
-        sqrtButton.setOnClickListener {
-            addTextOnSelection("\u221A")
-            inputField.setSelection(inputField.selectionStart)
-        }
+        sqrtButton.setOnClickListener { addTextOnSelection("\u221A") }
 
         powButton.setOnClickListener { addTextOnSelection("^") }
-        modButton.setOnClickListener { addTextOnSelection("%") }
+        modButton?.setOnClickListener { addTextOnSelection("%") }
         pointButton.setOnClickListener { addTextOnSelection(".") }
     }
 
@@ -115,7 +123,7 @@ class MainActivity : AppCompatActivity() {
             ""
         }
 
-        val floatDigitsPattern = "(\\d{9,}(?=E))".toRegex()
+        val floatDigitsPattern = "(\\d{9,}(?=E)|)".toRegex()
         val matchResult = floatDigitsPattern.find(resultString)?.value
         if (matchResult != null) {
             resultString = resultString.replace(matchResult, matchResult.substring(0, 8))
@@ -125,7 +133,8 @@ class MainActivity : AppCompatActivity() {
             resultString = resultString.substringBefore(".")
         }
 
-        resultField.text = resultString
+        calculationResult = resultString
+        resultField.text = calculationResult
     }
 
     private fun evaluate(expression: String) : Double {
@@ -144,8 +153,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getNextSymbol(editText: EditText): Char? {
-        val currentText = inputField.editableText
-        val selectionEnd = inputField.selectionEnd
+        val currentText = editText.editableText
+        val selectionEnd = editText.selectionEnd
         return if (selectionEnd != currentText.length) currentText[selectionEnd] else null
     }
 
