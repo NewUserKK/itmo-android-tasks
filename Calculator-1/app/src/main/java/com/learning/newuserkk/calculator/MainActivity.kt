@@ -2,10 +2,21 @@ package com.learning.newuserkk.calculator
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.widget.EditText
 
 import kotlinx.android.synthetic.main.activity_main.*
 import org.mariuszgromada.math.mxparser.Expression
+
+
+// TODO: fix unicode backspace char
+// TODO: fix markup for some dimensions
+// TODO: fix mod
+// TODO: fix div
+// TODO: add log
+// TODO: add module
+// TODO: add trigonometry
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,14 +37,6 @@ class MainActivity : AppCompatActivity() {
 
         calculationResult = savedInstanceState?.getString(CALCULATION_RESULT)
         resultField.text = calculationResult
-
-        // TODO: exceptions
-        // TODO: fix markup for some dimensions
-        // TODO: fix mod
-        // TODO: fix div
-        // TODO: add log
-        // TODO: add module
-        // TODO: add trigonometry
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -74,7 +77,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         backspaceButton.setOnClickListener { removeSelected() }
-        evaluateButton.setOnClickListener { updateResult() }
+        evaluateButton.setOnClickListener {
+            updateResult()
+            inputField.setText(calculationResult)
+            inputField.selectAll()
+        }
     }
 
 
@@ -123,7 +130,7 @@ class MainActivity : AppCompatActivity() {
             ""
         }
 
-        val floatDigitsPattern = "(\\d{9,}(?=E)|)".toRegex()
+        val floatDigitsPattern = "(\\d{9,}(?=E))".toRegex()
         val matchResult = floatDigitsPattern.find(resultString)?.value
         if (matchResult != null) {
             resultString = resultString.replace(matchResult, matchResult.substring(0, 8))
