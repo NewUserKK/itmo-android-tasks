@@ -2,45 +2,48 @@ package com.learning.newuserkk.calculator
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
+import android.support.v4.content.res.ResourcesCompat
+import android.widget.Button
 import android.widget.EditText
 
 import kotlinx.android.synthetic.main.activity_main.*
 import org.mariuszgromada.math.mxparser.Expression
 
 
-// TODO: fix unicode backspace char
-// TODO: fix markup for some dimensions
-// TODO: fix mod
-// TODO: fix div
-// TODO: add log
-// TODO: add module
-// TODO: add trigonometry
-
-
 class MainActivity : AppCompatActivity() {
 
     companion object {
         const val LOG_TAG = "MainActivity"
-        val CALCULATION_RESULT = MainActivity::class.qualifiedName + ".calculationResult"
+        val CLASSNAME = MainActivity::class.qualifiedName
     }
 
-    var calculationResult: String? = null
+    private var calculationResult: String = ""
+    private var isValidResult: Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         inputField.showSoftInputOnFocus = false
 
         setInputButtonListeners()
         setSpecialButtonListeners()
 
-        calculationResult = savedInstanceState?.getString(CALCULATION_RESULT)
+        val typeface = ResourcesCompat.getFont(this, R.font.dejavu_sans)
+        (backspaceButton as Button).typeface = typeface
+
+        calculationResult = savedInstanceState?.getString("$CLASSNAME.calculationResult") ?: ""
+        isValidResult = savedInstanceState?.getBoolean("$CLASSNAME.isValidResult") ?: false
         resultField.text = calculationResult
+        val validTextColor = ResourcesCompat.getColor(resources, R.color.colorTextLight, null)
+        val nonValidTextColor = ResourcesCompat.getColor(resources, R.color.colorTextNotValid, null)
+        resultField.setTextColor(if (isValidResult) validTextColor else nonValidTextColor)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putString(CALCULATION_RESULT, calculationResult)
+        outState?.putString("$CLASSNAME.calculationResult", calculationResult)
+        outState?.putBoolean("$CLASSNAME.isValidResult", isValidResult)
         super.onSaveInstanceState(outState)
     }
 
@@ -55,18 +58,17 @@ class MainActivity : AppCompatActivity() {
         button7.setOnClickListener { addTextOnSelection("7") }
         button8.setOnClickListener { addTextOnSelection("8") }
         button9.setOnClickListener { addTextOnSelection("9") }
-        factorialButton.setOnClickListener { addTextOnSelection("!") }
+        expButton.setOnClickListener { addTextOnSelection("e") }
+        piButton.setOnClickListener { addTextOnSelection("\u03C0") }
         openingBracketButton.setOnClickListener { addTextOnSelection("(") }
         closingBracketButton.setOnClickListener { addTextOnSelection(")") }
         divideButton.setOnClickListener { addTextOnSelection("/") }
         mulButton.setOnClickListener { addTextOnSelection("*") }
         minusButton.setOnClickListener { addTextOnSelection("-") }
         plusButton.setOnClickListener { addTextOnSelection("+") }
-
         sqrtButton.setOnClickListener { addTextOnSelection("\u221A") }
-
         powButton.setOnClickListener { addTextOnSelection("^") }
-        modButton?.setOnClickListener { addTextOnSelection("%") }
+        percentButton?.setOnClickListener { addTextOnSelection("%") }
         pointButton.setOnClickListener { addTextOnSelection(".") }
     }
 
@@ -76,11 +78,16 @@ class MainActivity : AppCompatActivity() {
             updateResult()
         }
 
-        backspaceButton.setOnClickListener { removeSelected() }
+        backspaceButton.setOnClickListener {
+            removeSelected()
+        }
+
         evaluateButton.setOnClickListener {
             updateResult()
-            inputField.setText(calculationResult)
-            inputField.selectAll()
+            if (isValidResult) {
+                inputField.setText(calculationResult)
+                inputField.selectAll()
+            }
         }
     }
 
@@ -91,9 +98,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         var textToAdd = s
-        if (isOperation(s)) {
+        val op = getOperation(s)
+        val isComplexOperation = (op != null && !op.isInfix)
+        if (isComplexOperation) {
             if (getNextSymbol(inputField) != '(') {
-                textToAdd += '('
+                textToAdd += "()"
             }
         }
 
@@ -101,6 +110,9 @@ class MainActivity : AppCompatActivity() {
         val selectionEnd = inputField.selectionEnd
         inputField.text = currentText.insert(selectionEnd, textToAdd)
         inputField.setSelection(selectionEnd + textToAdd.length)
+        if (isComplexOperation) {
+            inputField.setSelection(inputField.selectionEnd - 1)
+        }
         updateResult()
      }
 
@@ -122,12 +134,17 @@ class MainActivity : AppCompatActivity() {
     private fun updateResult() {
         val currentExpression = inputField.text.toString()
         val result = evaluate(currentExpression)
-        val isValidResult = (!result.isNaN() && !result.isInfinite())
+        var resultString = ""
 
-        var resultString = if (isValidResult) {
-            result.toString()
+        if (result != null) {
+            isValidResult = true
+            resultString = result.toString()
+
         } else {
-            ""
+            isValidResult = false
+            if (inputField.text.toString() != "") {
+                resultString = calculationResult
+            }
         }
 
         val floatDigitsPattern = "(\\d{9,}(?=E))".toRegex()
@@ -141,17 +158,24 @@ class MainActivity : AppCompatActivity() {
         }
 
         calculationResult = resultString
+
         resultField.text = calculationResult
+
+        val validTextColor = ResourcesCompat.getColor(resources, R.color.colorTextLight, null)
+        val nonValidTextColor = ResourcesCompat.getColor(resources, R.color.colorTextNotValid, null)
+        resultField.setTextColor(if (isValidResult) validTextColor else nonValidTextColor)
     }
 
-    private fun evaluate(expression: String) : Double {
+    private fun evaluate(expression: String): Double? {
         val expr = Expression(replaceEntities(expression))
-        return expr.calculate()
+        return if (expr.checkSyntax()) {
+            expr.calculate()
+        } else null
     }
 
     private fun replaceEntities(expression: String) : String {
         var replacedExpression = expression
-        for (op: OperationAlias in OperationAlias.values()) {
+        for (op: Operation in Operation.values()) {
             if (op.alias != null) {
                 replacedExpression = replacedExpression.replace(op.value, op.alias)
             }
@@ -165,12 +189,16 @@ class MainActivity : AppCompatActivity() {
         return if (selectionEnd != currentText.length) currentText[selectionEnd] else null
     }
 
-    private fun isOperation(token: String): Boolean {
-        for (op: OperationAlias in OperationAlias.values()) {
+    private fun getOperation(token: String): Operation? {
+        for (op: Operation in Operation.values()) {
             if (token == op.value || token == op.alias) {
-                return true
+                return op
             }
         }
-        return false
+        return null
+    }
+
+    private fun isOperation(token: String): Boolean {
+        return getOperation(token) != null
     }
 }
