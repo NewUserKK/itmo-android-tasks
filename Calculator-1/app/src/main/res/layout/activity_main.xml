@@ -30,22 +30,28 @@
             android:inputType="none"
             android:background="@drawable/text_field" />
 
-        <HorizontalScrollView
+        <!--<HorizontalScrollView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight=".10"-->
+            <!--android:layout_marginTop="7dp"-->
+            <!--android:layout_marginBottom="7dp"-->
+            <!--android:background="@drawable/text_field">-->
+
+
+        <!--</HorizontalScrollView>-->
+        <TextView
+            android:id="@+id/resultField"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight=".10"
             android:layout_marginTop="7dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/text_field">
-
-            <TextView
-                android:id="@+id/resultField"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center"
-                android:paddingEnd="10dp"
-                android:paddingStart="10dp" />
-        </HorizontalScrollView>
+            android:layout_gravity="end|center"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:scrollHorizontally="true"
+            android:background="@drawable/text_field"/>
 
         <TableLayout
             android:id="@+id/panel"

@@ -14,17 +14,14 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val LOG_TAG = "MainActivity"
-        val CLASSNAME = MainActivity::class.qualifiedName
     }
 
     private var calculationResult: String = ""
     private var isValidResult: Boolean = false
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         inputField.showSoftInputOnFocus = false
 
         setInputButtonListeners()
@@ -33,8 +30,8 @@ class MainActivity : AppCompatActivity() {
         val typeface = ResourcesCompat.getFont(this, R.font.dejavu_sans)
         (backspaceButton as Button).typeface = typeface
 
-        calculationResult = savedInstanceState?.getString("$CLASSNAME.calculationResult") ?: ""
-        isValidResult = savedInstanceState?.getBoolean("$CLASSNAME.isValidResult") ?: false
+        calculationResult = savedInstanceState?.getString("calculationResult") ?: ""
+        isValidResult = savedInstanceState?.getBoolean("isValidResult") ?: false
         resultField.text = calculationResult
         val validTextColor = ResourcesCompat.getColor(resources, R.color.colorTextLight, null)
         val nonValidTextColor = ResourcesCompat.getColor(resources, R.color.colorTextNotValid, null)
@@ -42,8 +39,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putString("$CLASSNAME.calculationResult", calculationResult)
-        outState?.putBoolean("$CLASSNAME.isValidResult", isValidResult)
+        outState?.putString("calculationResult", calculationResult)
+        outState?.putBoolean("isValidResult", isValidResult)
         super.onSaveInstanceState(outState)
     }
 
