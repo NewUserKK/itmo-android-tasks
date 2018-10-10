@@ -144,6 +144,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // TODO: change to DecimalFormat
         val floatDigitsPattern = "(\\d{9,}(?=E))".toRegex()
         val matchResult = floatDigitsPattern.find(resultString)?.value
         if (matchResult != null) {
@@ -187,12 +188,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getOperation(token: String): Operation? {
-        for (op: Operation in Operation.values()) {
-            if (token == op.value || token == op.alias) {
-                return op
-            }
-        }
-        return null
+        return Operation.values().find { token == it.value || token == it.alias }
     }
 
     private fun isOperation(token: String): Boolean {
