@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    style="@style/AppTheme"
+    android:orientation="vertical"
+    android:padding="5dp"
+    tools:context=".MainActivity"
+    tools:ignore="HardcodedText">
+
+    <EditText
+        android:id="@+id/inputField"
+
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".30"
+        android:gravity="center_vertical"
+        android:layout_marginTop="5dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+
+        android:ems="10"
+        android:inputType="none"
+        android:background="@drawable/text_field" />
+
+    <TextView
+        android:id="@+id/resultField"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".10"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
+        android:gravity="end|center_vertical"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:singleLine="true"
+        android:ellipsize="none"
+        android:scrollHorizontally="true"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:fadeScrollbars="false"
+        android:background="@drawable/text_field"/>
+
+    <TableLayout
+        android:id="@+id/panel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight=".60"
+        android:paddingBottom="5dp"
+        android:paddingEnd="2dp"
+        android:paddingStart="2dp"
+        android:paddingTop="5dp">
+
+        <TableRow style="@style/TableRow">
+
+            <Button
+                android:id="@+id/powButton"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="^" />
+
+            <Button
+                android:id="@+id/openingBracketButton"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="(" />
+
+            <Button
+                android:id="@+id/closingBracketButton"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text=")" />
+
+            <Button
+                android:id="@+id/clearButton"
+                style="@style/ClearButton"
+                android:layout_weight=".2"
+                android:text="C" />
+
+            <Button
+                android:id="@+id/backspaceButton"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="\u232B"
+                android:textColor="@color/colorAttention" />
+
+        </TableRow>
+
+        <TableRow style="@style/TableRow">
+
+            <Button
+                android:id="@+id/button7"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="7" />
+
+            <Button
+                android:id="@+id/button8"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="8" />
+
+            <Button
+                android:id="@+id/button9"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="9" />
+
+            <Button
+                android:id="@+id/divideButton"
+                style="@style/OperationButton"
+                android:layout_weight=".2"
+                android:text="/" />
+
+            <Button
+                android:id="@+id/sqrtButton"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="\u221A" />
+        </TableRow>
+
+        <TableRow style="@style/TableRow">
+
+            <Button
+                android:id="@+id/button4"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="4" />
+
+            <Button
+                android:id="@+id/button5"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="5" />
+
+            <Button
+                android:id="@+id/button6"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="6" />
+
+            <Button
+                android:id="@+id/mulButton"
+                style="@style/OperationButton"
+                android:layout_height="match_parent"
+                android:layout_weight=".2"
+                android:text="*" />
+
+            <Button
+                android:id="@+id/expButton"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="e" />
+
+        </TableRow>
+
+        <TableRow style="@style/TableRow">
+
+            <Button
+                android:id="@+id/button1"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="1" />
+
+            <Button
+                android:id="@+id/button2"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="2" />
+
+            <Button
+                android:id="@+id/button3"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="3" />
+
+            <Button
+                android:id="@+id/minusButton"
+                style="@style/OperationButton"
+                android:layout_weight=".2"
+                android:text="-" />
+
+            <Button
+                android:id="@+id/piButton"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="\u03C0" />
+        </TableRow>
+
+        <TableRow style="@style/TableRow">
+
+            <Button
+                android:id="@+id/pointButton"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="." />
+
+            <Button
+                android:id="@+id/button0"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="0" />
+
+            <Button
+                android:id="@+id/percentButton"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="%" />
+
+            <Button
+                android:id="@+id/plusButton"
+                style="@style/OperationButton"
+                android:layout_weight=".2"
+                android:text="+" />
+
+            <Button
+                android:id="@+id/evaluateButton"
+                style="@style/DefaultButton"
+                android:layout_weight=".2"
+                android:text="=" />
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
