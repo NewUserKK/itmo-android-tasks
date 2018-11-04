@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">PicturesBrowser</string>
+    <string name="title_images_list">Xkcd Browser</string>
+    <string name="title_images_detail">Images Detail</string>
+    <string name="detailsComicDescription">%1$s</string>
+    <string name="detailsComicDate">%1$d.%2$d.%3$d</string>
+    <string name="getMoreComics">Get %1$d more</string>
+    <string name="comicId">#%1$d</string>
+    <string name="unableToDecodePictureError">Couldn\'t decode picture</string>
+    <string name="headComicFetchErrorMessage">Couldn\'t fetch head comic.
+        Check your Internet connection and try again</string>
+    <string name="headComicFetchErrorReload">Reload</string>
+    <string name="headComicFetchErrorExit">Exit</string>
+</resources>

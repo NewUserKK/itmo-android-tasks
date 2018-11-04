@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent=".9"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@id/addComicButton"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include layout="@layout/images_list" />
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/addComicButton"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/getMoreComics"
+
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintTop_toBottomOf="@id/frameLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/frameLayout"
+        app:layout_constraintEnd_toEndOf="@id/frameLayout"
+        app:layout_constraintHeight_percent=".1"
+        />
+
+</android.support.constraint.ConstraintLayout>
