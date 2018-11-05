@@ -19,7 +19,9 @@ class PictureFetchAsyncTask(private val fetcher: PictureFetcher,
         if (urls.size != 1) {
             throw IllegalArgumentException("Accept one and only URL")
         }
-//        Thread.sleep(7000)
+        if (urls[0] == null) {
+            return null
+        }
         return fetcher.fetch(urls[0]!!)
     }
 

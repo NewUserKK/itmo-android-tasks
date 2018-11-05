@@ -33,12 +33,12 @@ object Content {
         return ITEMS[ITEMS.size - 1]
     }
 
-    fun getComicUrl(number: Int?=null): URL {
+    fun getComicUrl(number: Int?=null): URL? {
         if (number == null) {
             return URL("$BASE_URL/$BASE_URL_FILE_NAME")
         }
         if (number < 0) {
-            throw IllegalArgumentException("Comic number must be non-negative!")
+            return null
         }
         return URL("$BASE_URL/$number/$BASE_URL_FILE_NAME")
     }

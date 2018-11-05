@@ -23,7 +23,7 @@ class ImagesListActivity : AppCompatActivity() {
 
     companion object {
         const val LOG_TAG = "ImagesListActivity"
-        const val COMICS_TO_ADD = 10
+        const val COMICS_TO_ADD = 30
         const val LOADED_COMICS = "LOADED_COMICS"
         const val SHARED_PREFS_NAME = "ImagesListActivity"
     }
