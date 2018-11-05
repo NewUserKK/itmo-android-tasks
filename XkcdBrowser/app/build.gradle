@@ -7,7 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.learning.newuserkk.picturesbrowser"
+        applicationId "com.learning.newuserkk.xkcdbrowser"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
