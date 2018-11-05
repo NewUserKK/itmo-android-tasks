@@ -55,11 +55,7 @@ class ImagesListActivity : AppCompatActivity() {
         setupRecyclerView(images_list)
 
         // either saved when orientation changed or activity destroyed
-        loadedComicsCount = max(
-                savedInstanceState?.getInt(LOADED_COMICS) ?: 0,
-                getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-                        .getInt(LOADED_COMICS, 0)
-        )
+        loadedComicsCount = Content.ITEMS.size
 
         Log.d(LOG_TAG, "Found $loadedComicsCount already loaded comics")
         fetchComics()
@@ -72,30 +68,6 @@ class ImagesListActivity : AppCompatActivity() {
                         Content.getComicUrl(oldestComicId - i))
             }
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.apply {
-            putInt(LOADED_COMICS, Content.ITEMS.size)
-        }
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-                .edit()
-                .putInt(LOADED_COMICS, Content.ITEMS.size)
-                .apply()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(LOG_TAG, "onDestroy: clearing loaded comics count")
-        getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-                .edit()
-                .putInt(LOADED_COMICS, 0)
-                .apply()
     }
 
     private fun fetchComics() {
