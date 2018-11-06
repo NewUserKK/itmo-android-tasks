@@ -2,9 +2,11 @@ package com.learning.newuserkk.xkcdbrowser.picture
 
 import android.graphics.Bitmap
 import android.os.AsyncTask
+import android.util.Log
 import android.view.View
 import com.learning.newuserkk.xkcdbrowser.R
 import kotlinx.android.synthetic.main.image_detail.view.*
+import java.io.IOException
 import java.lang.ref.WeakReference
 
 
@@ -22,7 +24,15 @@ class BitmapDownloadAsyncTask(view: View, private val savePath: String):
             throw IllegalArgumentException("Accept one and only comic")
         }
         val comic = params[0]
-        return Pair(comic, comic.fetchBitmap(savePath))
+        var bitmap: Bitmap? = null
+        try {
+            bitmap = comic.fetchBitmap(savePath)
+        } catch (e: SecurityException) {
+            Log.e(LOG_TAG, e.message)
+        } catch (e: IOException) {
+            Log.e(LOG_TAG, e.message)
+        }
+        return Pair(comic, bitmap)
     }
 
     override fun onPostExecute(result: Pair<XkcdComic, Bitmap?>) {

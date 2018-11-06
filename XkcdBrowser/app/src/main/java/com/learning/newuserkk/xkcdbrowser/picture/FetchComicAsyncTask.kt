@@ -4,6 +4,8 @@ import android.os.AsyncTask
 import android.util.Log
 import com.learning.newuserkk.xkcdbrowser.Content
 import com.learning.newuserkk.xkcdbrowser.PictureRecyclerViewAdapter
+import java.io.IOException
+import java.net.MalformedURLException
 import java.net.URL
 
 
@@ -20,10 +22,14 @@ open class FetchComicAsyncTask(private val fetcher: PictureFetcher,
         if (urls.size != 1) {
             throw IllegalArgumentException("Accept one and only URL")
         }
-        if (urls[0] == null) {
-            return null
+        val url = urls[0] ?: return null
+        var comic: XkcdComic? = null
+        try {
+            comic = fetcher.fetch(url)
+        } catch (e: IOException) {
+            Log.e(LOG_TAG, e.message)
         }
-        return fetcher.fetch(urls[0]!!)
+        return comic
     }
 
     override fun onPostExecute(result: XkcdComic?) {

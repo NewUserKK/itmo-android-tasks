@@ -6,9 +6,9 @@
     <string name="detailsComicDate">%1$d.%2$d.%3$d</string>
     <string name="getMoreComics">Get %1$d more</string>
     <string name="comicId">#%1$d</string>
-    <string name="unableToDecodePictureError">Couldn\'t decode picture</string>
+    <string name="unableToDecodePictureError">Couldn\'t decode or fetch picture</string>
     <string name="headComicFetchErrorMessage">Couldn\'t fetch head comic.
         Check your Internet connection and try again</string>
-    <string name="headComicFetchErrorReload">Reload</string>
-    <string name="headComicFetchErrorExit">Exit</string>
+    <string name="comicFetchErrorReload">Reload</string>
+    <string name="comicFetchErrorExit">Exit</string>
 </resources>

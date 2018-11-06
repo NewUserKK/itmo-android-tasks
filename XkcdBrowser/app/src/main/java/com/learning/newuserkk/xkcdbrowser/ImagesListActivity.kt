@@ -75,25 +75,25 @@ class ImagesListActivity : AppCompatActivity() {
         }
     }
 
+    fun showComicsFetchErrorDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(getString(R.string.headComicFetchErrorMessage))
+                .setPositiveButton(getString(R.string.comicFetchErrorReload)) { dialog, _ ->
+                    dialog.dismiss()
+                    fetchAllComics()
+                }
+                .setNegativeButton(getString(R.string.comicFetchErrorExit)) { dialog, _ ->
+                    dialog.dismiss()
+                    this.finish()
+                }
+                .show()
+    }
+
     private fun fetchAllComics() {
         if (loadedComicsCount == 0) {
             val task = FetchAllComicsAsyncTask(fetcher, adapter, this)
             task.execute(Content.getComicUrl())
         }
-    }
-
-    private fun showHeadComicFetchErrorDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setMessage(getString(R.string.headComicFetchErrorMessage))
-                .setPositiveButton(getString(R.string.headComicFetchErrorReload)) { dialog, _ ->
-                    dialog.dismiss()
-                    fetchStartComics()
-                }
-                .setNegativeButton(getString(R.string.headComicFetchErrorExit)) { dialog, _ ->
-                    dialog.dismiss()
-                    this.finish()
-                }
-                .show()
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
