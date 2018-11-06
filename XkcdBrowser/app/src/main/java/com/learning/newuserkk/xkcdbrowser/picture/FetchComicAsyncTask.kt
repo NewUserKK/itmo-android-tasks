@@ -7,13 +7,14 @@ import com.learning.newuserkk.xkcdbrowser.PictureRecyclerViewAdapter
 import java.net.URL
 
 
-class PictureFetchAsyncTask(private val fetcher: PictureFetcher,
-                            private val adapter: PictureRecyclerViewAdapter):
-        AsyncTask<URL, Unit, XkcdComic?>() {
+open class FetchComicAsyncTask(private val fetcher: PictureFetcher,
+                               private val adapter: PictureRecyclerViewAdapter):
+        AsyncTask<URL, Unit, XkcdComic?>(), AsyncTaskCallback {
 
     companion object {
-        const val LOG_TAG = "PictureFetchAsyncTask"
+        const val LOG_TAG = "FetchComicAsyncTask"
     }
+
 
     override fun doInBackground(vararg urls: URL?): XkcdComic? {
         if (urls.size != 1) {
@@ -31,5 +32,10 @@ class PictureFetchAsyncTask(private val fetcher: PictureFetcher,
             Content.addItem(result)
             adapter.notifyDataSetChanged()
         }
+        onTaskCompleted()
+    }
+
+    override fun onTaskCompleted() {
+        // pass
     }
 }

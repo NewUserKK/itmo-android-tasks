@@ -21,16 +21,12 @@ object Content {
             }
     )
 
-    var latestComic: XkcdComic? = null
+    fun getLatestComic(): XkcdComic? {
+        return if (ITEMS.size > 0) ITEMS[0] else null
+    }
 
-
-//    fun getLatestComic(): XkcdComic? {
-//        val maxIndex = ITEM_MAP.keys.max()
-//        return if (maxIndex != null) ITEM_MAP[maxIndex] else null
-//    }
-
-    fun getOldestComic(): XkcdComic {
-        return ITEMS[ITEMS.size - 1]
+    fun getOldestComic(): XkcdComic? {
+        return if (ITEMS.size > 0) ITEMS[ITEMS.size - 1] else null
     }
 
     fun getComicUrl(number: Int?=null): URL? {
