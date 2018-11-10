@@ -12,7 +12,7 @@ class FetchAllComicsAsyncTask(fetcher: PictureFetcher,
     private val activityRef = WeakReference(activity)
 
     override fun onTaskCompleted() {
-        activityRef.get()?.apply {
+        activityRef.get()?.run {
             if (this@FetchAllComicsAsyncTask.get() == null) {
                 showComicsFetchErrorDialog()
             } else {

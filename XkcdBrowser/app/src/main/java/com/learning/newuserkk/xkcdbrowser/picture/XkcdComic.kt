@@ -46,8 +46,8 @@ data class XkcdComic
         }
 
         Log.d(LOG_TAG, "Fetching image from $imgLink...")
-        val inputStream = BufferedInputStream(URL(imgLink).openStream())
-        val outputStream = BufferedOutputStream(FileOutputStream(toPath))
+        val inputStream = URL(imgLink).openStream().buffered()
+        val outputStream = FileOutputStream(toPath).buffered()
 
         var i = inputStream.read()
         while (i != -1) {
