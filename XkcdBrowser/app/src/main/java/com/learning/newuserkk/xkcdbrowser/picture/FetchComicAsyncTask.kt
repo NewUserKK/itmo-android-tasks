@@ -9,8 +9,7 @@ import java.net.MalformedURLException
 import java.net.URL
 
 
-open class FetchComicAsyncTask(private val fetcher: PictureFetcher,
-                               private val adapter: PictureRecyclerViewAdapter):
+open class FetchComicAsyncTask(private val adapter: PictureRecyclerViewAdapter):
         AsyncTask<URL, Unit, XkcdComic?>(), AsyncTaskCallback {
 
     companion object {
@@ -25,7 +24,7 @@ open class FetchComicAsyncTask(private val fetcher: PictureFetcher,
         val url = urls[0] ?: return null
         var comic: XkcdComic? = null
         try {
-            comic = fetcher.fetch(url)
+            comic = PictureFetcher.fetch(url)
         } catch (e: IOException) {
             Log.e(LOG_TAG, e.message)
         }

@@ -6,11 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import java.net.URL
 
 
-class PictureFetcher {
+object PictureFetcher {
 
-    companion object {
-        const val LOG_TAG = "PictureFetcher"
-    }
+    const val LOG_TAG = "PictureFetcher"
 
     private val mapper: ObjectMapper = ObjectMapper()
 

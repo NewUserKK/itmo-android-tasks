@@ -31,7 +31,6 @@ class ImagesListActivity : AppCompatActivity() {
      */
     private var twoPane = false
     private lateinit var adapter: PictureRecyclerViewAdapter
-    private val fetcher = PictureFetcher()
     private var loadedComicsCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +64,7 @@ class ImagesListActivity : AppCompatActivity() {
         addComicButton.setOnClickListener {
             val oldestComicId = Content.getOldestComic()?.id ?: return@setOnClickListener
             for (i in 1..COMICS_TO_ADD) {
-                FetchComicAsyncTask(fetcher, adapter).execute(
+                FetchComicAsyncTask(adapter).execute(
                         Content.getComicUrl(oldestComicId - i))
             }
         }
@@ -74,7 +73,7 @@ class ImagesListActivity : AppCompatActivity() {
     fun fetchStartComics() {
         for (i in loadedComicsCount until Content.START_COUNT) {
             val latestComic = Content.getLatestComic() ?: break
-            FetchComicAsyncTask(fetcher, adapter).execute(
+            FetchComicAsyncTask(adapter).execute(
                     Content.getComicUrl(latestComic.id - i))
         }
     }
@@ -95,7 +94,7 @@ class ImagesListActivity : AppCompatActivity() {
 
     private fun fetchAllComics() {
         if (loadedComicsCount == 0) {
-            val task = FetchAllComicsAsyncTask(fetcher, adapter, this)
+            val task = FetchAllComicsAsyncTask(adapter, this)
             task.execute(Content.getComicUrl())
         }
     }
