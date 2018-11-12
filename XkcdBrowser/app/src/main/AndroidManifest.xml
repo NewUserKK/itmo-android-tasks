@@ -33,6 +33,7 @@
         <activity android:name=".HeadComicFetchErrorActivity" />
 
         <service android:name=".picture.PictureDownloadService" />
+        <service android:name=".picture.FetchComicService" />
     </application>
 
 </manifest>
