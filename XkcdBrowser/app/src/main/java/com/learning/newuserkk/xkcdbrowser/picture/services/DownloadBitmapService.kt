@@ -6,11 +6,10 @@ import android.graphics.Bitmap
 import android.util.Log
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import java.io.IOException
-import java.net.URL
+
 
 const val COMIC_EXTRA = "com.learning.newuserkk.xkcdbrowser.picture.services.extra.comic"
 const val SAVE_PATH_EXTRA = "com.learning.newuserkk.xkcdbrowser.picture.services.extra.savepath"
-
 
 class DownloadBitmapService: BaseService<Bitmap>("DownloadBitmapService") {
 

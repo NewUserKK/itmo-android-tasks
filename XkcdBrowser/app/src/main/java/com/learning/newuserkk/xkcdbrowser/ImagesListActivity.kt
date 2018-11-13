@@ -106,7 +106,7 @@ class ImagesListActivity : AppCompatActivity() {
                             Content.addItem(it)
                             adapter.notifyDataSetChanged()
                         } ?: Toast.makeText(this@ImagesListActivity,
-                                "Could'n load some comics",
+                                getString(R.string.loadComicJsonErrorMessage),
                                 Toast.LENGTH_SHORT)
                                 .show()
                     }
