@@ -2,13 +2,16 @@ package com.learning.newuserkk.xkcdbrowser.picture
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Parcelable
 import android.util.Log
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.learning.newuserkk.xkcdbrowser.picture.asynctasks.BitmapDownloadAsyncTask
+import com.learning.newuserkk.xkcdbrowser.picture.asynctasks.DownloadBitmapAsyncTask
+import kotlinx.android.parcel.Parcelize
 import java.io.*
 import java.net.URL
 
+@Parcelize
 data class XkcdComic
     @JsonCreator constructor(
             @JsonProperty("num") val id: Int,
@@ -25,17 +28,15 @@ data class XkcdComic
             @JsonProperty("year") val year: Int,
             @JsonProperty("month") val month: Int,
             @JsonProperty("day") val day: Int
-    ) {
+    ): Parcelable {
 
     companion object {
         const val LOG_TAG = "XkcdComic"
     }
 
-    lateinit var localFile: File
-
     @Throws(SecurityException::class, IOException::class)
     fun fetchBitmap(toPath: String): Bitmap? {
-        localFile = File(toPath)
+        val localFile = File(toPath)
         val localPath = localFile.absolutePath
 
         if (localFile.exists()) {
@@ -60,8 +61,8 @@ data class XkcdComic
         inputStream.close()
         outputStream.close()
 
-        Log.d(BitmapDownloadAsyncTask.LOG_TAG,"Done fetching from $imgLink")
-        Log.d(BitmapDownloadAsyncTask.LOG_TAG, "Saved to $toPath")
+        Log.d(DownloadBitmapAsyncTask.LOG_TAG,"Done fetching from $imgLink")
+        Log.d(DownloadBitmapAsyncTask.LOG_TAG, "Saved to $toPath")
         return BitmapFactory.decodeFile(toPath)
     }
 }

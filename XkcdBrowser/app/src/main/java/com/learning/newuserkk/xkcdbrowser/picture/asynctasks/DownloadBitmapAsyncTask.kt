@@ -11,11 +11,11 @@ import java.io.IOException
 import java.lang.ref.WeakReference
 
 
-class BitmapDownloadAsyncTask(view: View, private val savePath: String):
+class DownloadBitmapAsyncTask(view: View, private val savePath: String):
         AsyncTask<XkcdComic, Unit, Pair<XkcdComic, Bitmap?>>() {
 
     companion object {
-        const val LOG_TAG = "BitmapDownloadAsyncTask"
+        const val LOG_TAG = "DownloadBitmapAsyncTask"
     }
 
     private val viewRef = WeakReference(view)
@@ -42,7 +42,7 @@ class BitmapDownloadAsyncTask(view: View, private val savePath: String):
         val bitmap = result.second
         view?.apply {
             if (bitmap == null) {
-                detailsComicDescription.text = resources.getString(R.string.unableToDecodePictureError)
+                detailsComicDescription.text = resources.getString(R.string.loadPictureErrorMessage)
                 return
             }
 

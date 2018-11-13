@@ -37,6 +37,7 @@
         <service
             android:name=".picture.BitmapDownloadService"
             android:exported="false"></service>
+        <service android:name=".picture.services.DownloadBitmapService" />
     </application>
 
 </manifest>

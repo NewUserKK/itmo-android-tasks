@@ -4,8 +4,8 @@ import android.os.Binder
 import android.os.Handler
 import android.os.Looper
 
-class ServiceBinder(private val service: BaseService): Binder() {
-    fun setCallback(callback: LoadCallback) {
+class ServiceBinder<T>(private val service: BaseService<T>): Binder() {
+    fun setCallback(callback: LoadCallback<T>) {
         Handler(Looper.getMainLooper()).post {
             service.callback = callback
             while (!service.responses.isEmpty()) {

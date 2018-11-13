@@ -9,19 +9,20 @@ import android.util.Log
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import java.util.*
 
-abstract class BaseService(name: String): IntentService(name) {
+const val URL_EXTRA = "com.learning.newuserkk.xkcdbrowser.picture.services.extra.url"
+
+abstract class BaseService<T>(name: String): IntentService(name) {
 
     companion object {
-        const val URL_EXTRA = "com.learning.newuserkk.xkcdbrowser.picture.extra.url"
         const val LOG_TAG = "BaseService"
     }
 
-    val responses = ArrayDeque<XkcdComic>()
-    var callback: LoadCallback? = null
+    val responses = ArrayDeque<T>()
+    var callback: LoadCallback<T>? = null
 
     protected val mainHandler = Handler(Looper.getMainLooper())
 
-    protected fun deliver(item: XkcdComic?) {
+    protected fun deliver(item: T?) {
         callback?.onLoad(item) ?: responses.add(item)
     }
 

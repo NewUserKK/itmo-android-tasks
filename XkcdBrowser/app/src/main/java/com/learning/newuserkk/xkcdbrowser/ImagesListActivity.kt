@@ -39,7 +39,7 @@ class ImagesListActivity : AppCompatActivity() {
     private var twoPane = false
 
     private lateinit var adapter: PictureRecyclerViewAdapter
-    private var binder: ServiceBinder? = null
+    private var binder: ServiceBinder<XkcdComic>? = null
     private lateinit var serviceConnection: ServiceConnection
     private var loadedComicsCount = 0
 
@@ -97,9 +97,9 @@ class ImagesListActivity : AppCompatActivity() {
     private fun setupServiceConnection() {
         serviceConnection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                binder = service as ServiceBinder
+                binder = service as ServiceBinder<XkcdComic>
 
-                binder!!.setCallback(object : LoadCallback {
+                binder!!.setCallback(object : LoadCallback<XkcdComic> {
                     override fun onLoad(item: XkcdComic?) {
                         Log.d(LOG_TAG, "Got ${item?.id}")
                         item?.let {
@@ -138,11 +138,11 @@ class ImagesListActivity : AppCompatActivity() {
     fun showComicsFetchErrorDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(getString(R.string.headComicFetchErrorMessage))
-                .setPositiveButton(getString(R.string.comicFetchErrorReload)) { dialog, _ ->
+                .setPositiveButton(getString(R.string.reloadMessage)) { dialog, _ ->
                     dialog.dismiss()
                     fetchAllComics()
                 }
-                .setNegativeButton(getString(R.string.comicFetchErrorExit)) { dialog, _ ->
+                .setNegativeButton(getString(R.string.exitMessage)) { dialog, _ ->
                     dialog.dismiss()
                     this.finish()
                 }
@@ -155,6 +155,4 @@ class ImagesListActivity : AppCompatActivity() {
             unbindService(serviceConnection)
         }
     }
-
-
 }

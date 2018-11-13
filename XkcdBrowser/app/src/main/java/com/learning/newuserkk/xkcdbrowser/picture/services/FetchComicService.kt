@@ -8,10 +8,10 @@ import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import java.io.IOException
 import java.net.URL
 
-class FetchComicService: BaseService("FetchComicService") {
+
+class FetchComicService: BaseService<XkcdComic>("FetchComicService") {
 
     companion object {
-        const val URL_EXTRA = "com.learning.newuserkk.xkcdbrowser.picture.extra.url"
         const val LOG_TAG = "FetchComicService"
 
         fun startService(context: Context, url: URL) {
@@ -29,7 +29,7 @@ class FetchComicService: BaseService("FetchComicService") {
                 try {
                     item = PictureFetcher.fetch(URL(urlString))
                 } catch (e: IOException) {
-                    Log.e(PictureFetcher.LOG_TAG, e.message)
+                    Log.e(LOG_TAG, e.message)
                 }
                 mainHandler.post {
                     deliver(item)
