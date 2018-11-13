@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.learning.newuserkk.xkcdbrowser.picture.BitmapDownloadAsyncTask
+import com.learning.newuserkk.xkcdbrowser.picture.asynctasks.BitmapDownloadAsyncTask
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 
 

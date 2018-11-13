@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
-import android.os.Binder
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
@@ -16,10 +15,14 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.Toast
 import com.learning.newuserkk.xkcdbrowser.picture.*
+import com.learning.newuserkk.xkcdbrowser.picture.asynctasks.FetchAllComicsAsyncTask
+import com.learning.newuserkk.xkcdbrowser.picture.asynctasks.FetchComicAsyncTask
+import com.learning.newuserkk.xkcdbrowser.picture.services.FetchComicService
+import com.learning.newuserkk.xkcdbrowser.picture.services.LoadCallback
+import com.learning.newuserkk.xkcdbrowser.picture.services.ServiceBinder
 import kotlinx.android.synthetic.main.activity_images_list.*
 
 import kotlinx.android.synthetic.main.images_list.*
-import java.net.URL
 
 
 class ImagesListActivity : AppCompatActivity() {
@@ -36,7 +39,7 @@ class ImagesListActivity : AppCompatActivity() {
     private var twoPane = false
 
     private lateinit var adapter: PictureRecyclerViewAdapter
-    private lateinit var binder: FetchComicService.FetchComicServiceBinder
+    private var binder: ServiceBinder? = null
     private lateinit var serviceConnection: ServiceConnection
     private var loadedComicsCount = 0
 
@@ -56,30 +59,11 @@ class ImagesListActivity : AppCompatActivity() {
         }
 
         setupRecyclerView(images_list)
+        setupServiceConnection()
 
-        serviceConnection = object: ServiceConnection {
-            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                Log.d(LOG_TAG, "Service $name connected")
-                binder = service as FetchComicService.FetchComicServiceBinder
-
-                binder.setCallback(object: FetchComicService.LoadCallback {
-                    override fun onLoad(item: XkcdComic?) {
-                        Log.d(LOG_TAG, "Got $item")
-                        item?.let {
-                            Content.addItem(it)
-                            adapter.notifyDataSetChanged()
-                        } ?: Toast.makeText(this@ImagesListActivity,
-                                "Could'n load some comics",
-                                Toast.LENGTH_SHORT)
-                                .show()
-                    }
-                })
-            }
-
-            override fun onServiceDisconnected(name: ComponentName?) {
-                // pass
-            }
-        }
+        bindService(Intent(this, FetchComicService::class.java),
+                serviceConnection,
+                Context.BIND_AUTO_CREATE)
 
         loadedComicsCount = Content.ITEMS.size
 
@@ -104,10 +88,44 @@ class ImagesListActivity : AppCompatActivity() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        unbindService(serviceConnection)
+    private fun setupRecyclerView(recyclerView: RecyclerView) {
+        adapter = PictureRecyclerViewAdapter(
+                this, Content.ITEMS, twoPane)
+        recyclerView.adapter = adapter
     }
+
+    private fun setupServiceConnection() {
+        serviceConnection = object : ServiceConnection {
+            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+                binder = service as ServiceBinder
+
+                binder!!.setCallback(object : LoadCallback {
+                    override fun onLoad(item: XkcdComic?) {
+                        Log.d(LOG_TAG, "Got ${item?.id}")
+                        item?.let {
+                            Content.addItem(it)
+                            adapter.notifyDataSetChanged()
+                        } ?: Toast.makeText(this@ImagesListActivity,
+                                "Could'n load some comics",
+                                Toast.LENGTH_SHORT)
+                                .show()
+                    }
+                })
+            }
+
+            override fun onServiceDisconnected(name: ComponentName?) {
+                binder = null
+            }
+        }
+    }
+
+    private fun fetchAllComics() {
+        if (loadedComicsCount < Content.START_COUNT) {
+            val task = FetchAllComicsAsyncTask(adapter, this)
+            task.execute(Content.getComicUrl())
+        }
+    }
+
 
     fun fetchStartComics() {
         for (i in loadedComicsCount until Content.START_COUNT) {
@@ -131,16 +149,12 @@ class ImagesListActivity : AppCompatActivity() {
                 .show()
     }
 
-    private fun fetchAllComics() {
-        if (loadedComicsCount < Content.START_COUNT) {
-            val task = FetchAllComicsAsyncTask(adapter, this)
-            task.execute(Content.getComicUrl())
+    override fun onDestroy() {
+        super.onDestroy()
+        if (binder != null) {
+            unbindService(serviceConnection)
         }
     }
 
-    private fun setupRecyclerView(recyclerView: RecyclerView) {
-        adapter = PictureRecyclerViewAdapter(
-                this, Content.ITEMS, twoPane)
-        recyclerView.adapter = adapter
-    }
+
 }

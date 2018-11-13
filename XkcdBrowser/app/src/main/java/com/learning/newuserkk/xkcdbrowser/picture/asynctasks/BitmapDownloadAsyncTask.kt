@@ -1,10 +1,11 @@
-package com.learning.newuserkk.xkcdbrowser.picture
+package com.learning.newuserkk.xkcdbrowser.picture.asynctasks
 
 import android.graphics.Bitmap
 import android.os.AsyncTask
 import android.util.Log
 import android.view.View
 import com.learning.newuserkk.xkcdbrowser.R
+import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import kotlinx.android.synthetic.main.image_detail.view.*
 import java.io.IOException
 import java.lang.ref.WeakReference

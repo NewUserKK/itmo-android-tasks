@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.learning.newuserkk.xkcdbrowser.picture.asynctasks.BitmapDownloadAsyncTask
 import java.io.*
 import java.net.URL
 
@@ -32,6 +33,7 @@ data class XkcdComic
 
     lateinit var localFile: File
 
+    @Throws(SecurityException::class, IOException::class)
     fun fetchBitmap(toPath: String): Bitmap? {
         localFile = File(toPath)
         val localPath = localFile.absolutePath
