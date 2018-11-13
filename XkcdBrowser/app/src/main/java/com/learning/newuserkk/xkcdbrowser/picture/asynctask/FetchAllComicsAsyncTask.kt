@@ -1,4 +1,4 @@
-package com.learning.newuserkk.xkcdbrowser.picture.asynctasks
+package com.learning.newuserkk.xkcdbrowser.picture.asynctask
 
 import com.learning.newuserkk.xkcdbrowser.ImagesListActivity
 import com.learning.newuserkk.xkcdbrowser.PictureRecyclerViewAdapter

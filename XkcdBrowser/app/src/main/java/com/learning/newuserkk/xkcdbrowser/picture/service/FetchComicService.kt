@@ -1,4 +1,4 @@
-package com.learning.newuserkk.xkcdbrowser.picture.services
+package com.learning.newuserkk.xkcdbrowser.picture.service
 
 import android.content.Context
 import android.content.Intent
@@ -8,8 +8,9 @@ import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import java.io.IOException
 import java.net.URL
 
+const val URL_EXTRA = "com.learning.newuserkk.xkcdbrowser.picture.services.extra.url"
 
-class FetchComicService: BaseService<XkcdComic>("FetchComicService") {
+open class FetchComicService: BaseService<XkcdComic>("FetchComicService") {
 
     companion object {
         const val LOG_TAG = "FetchComicService"

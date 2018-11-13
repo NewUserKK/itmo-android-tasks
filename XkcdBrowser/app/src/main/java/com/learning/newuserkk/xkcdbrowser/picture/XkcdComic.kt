@@ -6,7 +6,7 @@ import android.os.Parcelable
 import android.util.Log
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.learning.newuserkk.xkcdbrowser.picture.asynctasks.DownloadBitmapAsyncTask
+import com.learning.newuserkk.xkcdbrowser.picture.asynctask.DownloadBitmapAsyncTask
 import kotlinx.android.parcel.Parcelize
 import java.io.*
 import java.net.URL

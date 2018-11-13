@@ -14,18 +14,43 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.Toast
-import com.learning.newuserkk.xkcdbrowser.picture.*
-import com.learning.newuserkk.xkcdbrowser.picture.asynctasks.FetchAllComicsAsyncTask
-import com.learning.newuserkk.xkcdbrowser.picture.asynctasks.FetchComicAsyncTask
-import com.learning.newuserkk.xkcdbrowser.picture.services.FetchComicService
-import com.learning.newuserkk.xkcdbrowser.picture.services.LoadCallback
-import com.learning.newuserkk.xkcdbrowser.picture.services.ServiceBinder
+import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
+import com.learning.newuserkk.xkcdbrowser.picture.service.FetchComicService
+import com.learning.newuserkk.xkcdbrowser.picture.service.LoadCallback
+import com.learning.newuserkk.xkcdbrowser.picture.service.ServiceBinder
 import kotlinx.android.synthetic.main.activity_images_list.*
-
 import kotlinx.android.synthetic.main.images_list.*
 
 
 class ImagesListActivity : AppCompatActivity() {
+
+    inner class LoadComicCallback: LoadCallback<XkcdComic> {
+        override fun onLoad(item: XkcdComic?) {
+            Log.d(LOG_TAG, "Got ${item?.id}")
+            if (item != null) {
+                Content.addItem(item)
+                adapter.notifyDataSetChanged()
+            } else {
+                Toast.makeText(this@ImagesListActivity,
+                        getString(R.string.loadComicJsonErrorMessage),
+                        Toast.LENGTH_SHORT)
+                        .show()
+            }
+        }
+    }
+
+    inner class LoadHeadComicCallback: LoadCallback<XkcdComic> {
+        override fun onLoad(item: XkcdComic?) {
+            Log.d(LOG_TAG, "Got ${item?.id}")
+            if (item != null) {
+                Content.addItem(item)
+                adapter.notifyDataSetChanged()
+            } else {
+                showComicsFetchErrorDialog()
+            }
+        }
+    }
+
 
     companion object {
         const val LOG_TAG = "ImagesListActivity"
@@ -59,20 +84,19 @@ class ImagesListActivity : AppCompatActivity() {
         }
 
         setupRecyclerView(images_list)
-        setupServiceConnection()
-
-        bindService(Intent(this, FetchComicService::class.java),
-                serviceConnection,
-                Context.BIND_AUTO_CREATE)
 
         loadedComicsCount = Content.ITEMS.size
 
-        if (loadedComicsCount != 0) {
+        Log.d(LOG_TAG, "Found $loadedComicsCount already loaded comics")
+        if (loadedComicsCount == 0) {
+            fetchStartComics()
+        } else {
+            serviceConnection = getDefaultServiceConnection()
+            bindService(Intent(this, FetchComicService::class.java),
+                    serviceConnection,
+                    Context.BIND_AUTO_CREATE)
             adapter.notifyDataSetChanged()
         }
-
-        Log.d(LOG_TAG, "Found $loadedComicsCount already loaded comics")
-        fetchAllComics()
 
         addComicButton.text = getString(R.string.getMoreComics, COMICS_TO_ADD)
         addComicButton.setOnClickListener {
@@ -94,23 +118,11 @@ class ImagesListActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
-    private fun setupServiceConnection() {
-        serviceConnection = object : ServiceConnection {
+    private fun getDefaultServiceConnection(): ServiceConnection {
+        return object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
                 binder = service as ServiceBinder<XkcdComic>
-
-                binder!!.setCallback(object : LoadCallback<XkcdComic> {
-                    override fun onLoad(item: XkcdComic?) {
-                        Log.d(LOG_TAG, "Got ${item?.id}")
-                        item?.let {
-                            Content.addItem(it)
-                            adapter.notifyDataSetChanged()
-                        } ?: Toast.makeText(this@ImagesListActivity,
-                                getString(R.string.loadComicJsonErrorMessage),
-                                Toast.LENGTH_SHORT)
-                                .show()
-                    }
-                })
+                binder!!.setCallback(LoadComicCallback())
             }
 
             override fun onServiceDisconnected(name: ComponentName?) {
@@ -119,20 +131,47 @@ class ImagesListActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchAllComics() {
-        if (loadedComicsCount < Content.START_COUNT) {
-            val task = FetchAllComicsAsyncTask(adapter, this)
-            task.execute(Content.getComicUrl())
+    private fun fetchRemainingComics() {
+        unbindService(serviceConnection)
+        serviceConnection = getDefaultServiceConnection()
+        val oldestComicId = Content.getOldestComic()?.id ?: return
+        for (i in loadedComicsCount until Content.START_COUNT) {
+            val comic = Content.getComicUrl(oldestComicId - i) ?: break
+            FetchComicService.startService(this, comic)
         }
+        bindService(Intent(this, FetchComicService::class.java),
+                serviceConnection,
+                Context.BIND_AUTO_CREATE)
     }
 
 
     fun fetchStartComics() {
-        for (i in loadedComicsCount until Content.START_COUNT) {
-            val latestComic = Content.getLatestComic() ?: break
-            FetchComicAsyncTask(adapter).execute(
-                    Content.getComicUrl(latestComic.id - i))
+        FetchComicService.startService(this, Content.getComicUrl()!!)
+        serviceConnection = object : ServiceConnection {
+            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+                binder = service as ServiceBinder<XkcdComic>
+                binder!!.setCallback(object : LoadCallback<XkcdComic> {
+                    override fun onLoad(item: XkcdComic?) {
+                        Log.d(LOG_TAG, "Got #${item?.id}")
+                        if (item != null) {
+                            Content.addItem(item)
+                            adapter.notifyDataSetChanged()
+                            fetchRemainingComics()
+
+                        } else {
+                            showComicsFetchErrorDialog()
+                        }
+                    }
+                })
+            }
+
+            override fun onServiceDisconnected(name: ComponentName?) {
+                binder = null
+            }
         }
+        bindService(Intent(this, FetchComicService::class.java),
+                serviceConnection,
+                Context.BIND_AUTO_CREATE)
     }
 
     fun showComicsFetchErrorDialog() {
@@ -140,7 +179,7 @@ class ImagesListActivity : AppCompatActivity() {
         builder.setMessage(getString(R.string.headComicFetchErrorMessage))
                 .setPositiveButton(getString(R.string.reloadMessage)) { dialog, _ ->
                     dialog.dismiss()
-                    fetchAllComics()
+                    fetchStartComics()
                 }
                 .setNegativeButton(getString(R.string.exitMessage)) { dialog, _ ->
                     dialog.dismiss()

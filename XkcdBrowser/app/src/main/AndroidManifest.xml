@@ -30,14 +30,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.learning.newuserkk.xkcdbrowser.ImagesListActivity" />
         </activity>
-        <activity android:name=".HeadComicFetchErrorActivity" />
-
-        <service android:name=".picture.PictureDownloadService" />
-        <service android:name=".picture.services.FetchComicService" />
-        <service
-            android:name=".picture.BitmapDownloadService"
-            android:exported="false"></service>
-        <service android:name=".picture.services.DownloadBitmapService" />
+        <service android:name=".picture.service.FetchComicService" />
+        <service android:name=".picture.service.DownloadBitmapService" />
     </application>
 
 </manifest>

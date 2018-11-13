@@ -1,4 +1,4 @@
-package com.learning.newuserkk.xkcdbrowser.picture.services
+package com.learning.newuserkk.xkcdbrowser.picture.service
 
 import android.app.IntentService
 import android.content.Intent
@@ -6,10 +6,8 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
-import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import java.util.*
 
-const val URL_EXTRA = "com.learning.newuserkk.xkcdbrowser.picture.services.extra.url"
 
 abstract class BaseService<T>(name: String): IntentService(name) {
 

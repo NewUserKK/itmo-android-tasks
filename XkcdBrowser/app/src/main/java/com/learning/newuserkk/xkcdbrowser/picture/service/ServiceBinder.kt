@@ -1,4 +1,4 @@
-package com.learning.newuserkk.xkcdbrowser.picture.services
+package com.learning.newuserkk.xkcdbrowser.picture.service
 
 import android.os.Binder
 import android.os.Handler

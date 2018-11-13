@@ -14,10 +14,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
-import com.learning.newuserkk.xkcdbrowser.picture.services.DownloadBitmapService
-import com.learning.newuserkk.xkcdbrowser.picture.services.FetchComicService
-import com.learning.newuserkk.xkcdbrowser.picture.services.LoadCallback
-import com.learning.newuserkk.xkcdbrowser.picture.services.ServiceBinder
+import com.learning.newuserkk.xkcdbrowser.picture.service.DownloadBitmapService
+import com.learning.newuserkk.xkcdbrowser.picture.service.LoadCallback
+import com.learning.newuserkk.xkcdbrowser.picture.service.ServiceBinder
 import kotlinx.android.synthetic.main.image_detail.*
 
 
@@ -100,7 +99,6 @@ class ImagesDetailFragment : Fragment() {
 
         comic?.let {
             val path = context?.cacheDir?.absolutePath + "/${it.id}.png"
-//            DownloadBitmapAsyncTask(rootView, path).execute(it)
             DownloadBitmapService.startService(rootView.context, it, path)
             context?.bindService(Intent(context, DownloadBitmapService::class.java),
                     serviceConnection,
@@ -112,7 +110,8 @@ class ImagesDetailFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        context?.unbindService(serviceConnection)
+        if (binder != null) {
+            context?.unbindService(serviceConnection)
+        }
     }
-
 }

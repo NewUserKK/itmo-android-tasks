@@ -1,4 +1,4 @@
-package com.learning.newuserkk.xkcdbrowser.picture.asynctasks
+package com.learning.newuserkk.xkcdbrowser.picture.asynctask
 
 import android.os.AsyncTask
 import android.util.Log
