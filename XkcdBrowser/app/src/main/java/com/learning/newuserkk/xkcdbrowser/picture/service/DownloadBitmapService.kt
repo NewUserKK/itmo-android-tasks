@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.util.Log
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import java.io.IOException
+import java.lang.Exception
 
 
 const val COMIC_EXTRA = "com.learning.newuserkk.xkcdbrowser.picture.services.extra.comic"
@@ -29,16 +30,19 @@ class DownloadBitmapService: BaseService<Bitmap>("DownloadBitmapService") {
             val item = intent.getParcelableExtra<XkcdComic>(COMIC_EXTRA)
             val path = intent.getStringExtra(SAVE_PATH_EXTRA)
             if (item != null && path != null) {
+                val exceptions = mutableListOf<Exception>()
                 var bitmap: Bitmap? = null
                 try {
                     bitmap = item.fetchBitmap(path)
                 } catch (e: SecurityException) {
                     Log.e(LOG_TAG, e.message)
+                    exceptions.add(e)
                 } catch (e: IOException) {
                     Log.e(LOG_TAG, e.message)
+                    exceptions.add(e)
                 }
                 mainHandler.post {
-                    deliver(bitmap)
+                    deliver(Response(bitmap, exceptions))
                 }
             }
         }

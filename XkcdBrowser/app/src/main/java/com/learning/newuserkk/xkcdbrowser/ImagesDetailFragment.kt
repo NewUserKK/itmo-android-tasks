@@ -18,6 +18,8 @@ import com.learning.newuserkk.xkcdbrowser.picture.service.DownloadBitmapService
 import com.learning.newuserkk.xkcdbrowser.picture.service.LoadCallback
 import com.learning.newuserkk.xkcdbrowser.picture.service.ServiceBinder
 import kotlinx.android.synthetic.main.image_detail.*
+import java.io.IOException
+import java.lang.IllegalStateException
 
 
 /**
@@ -27,6 +29,46 @@ import kotlinx.android.synthetic.main.image_detail.*
  * on handsets.
  */
 class ImagesDetailFragment : Fragment() {
+
+    inner class BitmapLoadCallback: LoadCallback<Bitmap> {
+        override fun onLoad(item: Bitmap) {
+            val comic = comic
+            if (comic == null) {
+                Log.e(LOG_TAG, "Comic is null!")
+                return
+            }
+
+            Log.d(ImagesListActivity.LOG_TAG, "Loaded picture of #${comic.id}")
+            val imageView = detailsComicPicture
+            imageView.setImageBitmap(item)
+            imageView.contentDescription =
+                    resources.getString(R.string.detailsComicDescription, comic.alt)
+            detailsComicDescription.text = imageView.contentDescription
+            detailsComicDate.text = resources.getString(
+                    R.string.detailsComicDate,
+                    comic.day,
+                    comic.month,
+                    comic.year)
+        }
+
+        override fun onException(errors: List<Exception>) {
+            var message = ""
+            for (e in errors) {
+                when (e) {
+                    is IOException -> message += getString(R.string.loadPictureErrorMessage)
+                    is SecurityException -> message += getString(R.string.savePictureErrorMessage)
+                    is IllegalStateException -> message += getString(R.string.decodePictureErrorMessage)
+                }
+                message += "\n"
+            }
+            AlertDialog.Builder(this@ImagesDetailFragment.context!!)
+                    .setMessage(message)
+                    .setPositiveButton(getString(R.string.okMessage)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+        }
+    }
 
     companion object {
         const val ARG_ITEM_ID = "pictureDetail"
@@ -54,37 +96,7 @@ class ImagesDetailFragment : Fragment() {
         serviceConnection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
                 binder = service as ServiceBinder<Bitmap>
-
-                binder!!.setCallback(object : LoadCallback<Bitmap> {
-                    override fun onLoad(item: Bitmap?) {
-                        val comic = comic
-                        if (comic == null) {
-                            Log.w(LOG_TAG, "Comic is null!")
-                            return
-                        }
-
-                        Log.d(ImagesListActivity.LOG_TAG, "Loaded picture of #${comic.id}")
-                        if (item != null) {
-                            val imageView = detailsComicPicture
-                            imageView.setImageBitmap(item)
-                            imageView.contentDescription =
-                                    resources.getString(R.string.detailsComicDescription, comic.alt)
-                            detailsComicDescription.text = imageView.contentDescription
-                            detailsComicDate.text = resources.getString(
-                                    R.string.detailsComicDate,
-                                    comic.day,
-                                    comic.month,
-                                    comic.year)
-                        } else {
-                            AlertDialog.Builder(this@ImagesDetailFragment.context!!)
-                                    .setMessage(getString(R.string.loadPictureErrorMessage))
-                                    .setPositiveButton(getString(R.string.okMessage)) { dialog, _ ->
-                                        dialog.dismiss()
-                                    }
-                                    .show()
-                        }
-                    }
-                })
+                binder!!.setCallback(BitmapLoadCallback())
             }
 
             override fun onServiceDisconnected(name: ComponentName?) {

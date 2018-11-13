@@ -21,49 +21,46 @@ import com.learning.newuserkk.xkcdbrowser.picture.service.LoadCallback
 import com.learning.newuserkk.xkcdbrowser.picture.service.ServiceBinder
 import kotlinx.android.synthetic.main.activity_images_list.*
 import kotlinx.android.synthetic.main.images_list.*
+import java.io.IOException
 
 
 class ImagesListActivity : AppCompatActivity() {
 
     inner class LoadComicCallback: LoadCallback<XkcdComic> {
-        override fun onLoad(item: XkcdComic?) {
-            Log.d(LOG_TAG, "Got #${item?.id}")
-            if (item != null) {
+        override fun onLoad(item: XkcdComic) {
+            Log.d(LOG_TAG, "Got #${item.id}")
                 Content.addItem(item)
                 adapter.notifyDataSetChanged()
-            } else {
-                Toast.makeText(this@ImagesListActivity,
-                        getString(R.string.loadComicJsonErrorMessage),
-                        Toast.LENGTH_SHORT)
-                        .show()
             }
+
+        override fun onException(errors: List<Exception>) {
+            Toast.makeText(this@ImagesListActivity,
+                    getString(R.string.loadComicJsonErrorMessage),
+                    Toast.LENGTH_SHORT)
+                    .show()
         }
     }
 
     inner class LoadHeadComicCallback: LoadCallback<XkcdComic> {
-        override fun onLoad(item: XkcdComic?) {
-            Log.d(LOG_TAG, "Got #${item?.id}")
-            if (item != null) {
-                Content.addItem(item)
-                adapter.notifyDataSetChanged()
-                fetchRemainingComics()
+        override fun onLoad(item: XkcdComic) {
+            Log.d(LOG_TAG, "Got #${item.id}")
+            Content.addItem(item)
+            adapter.notifyDataSetChanged()
+            fetchRemainingComics()
+        }
 
-            } else {
-                showComicsFetchErrorDialog()
-            }
+        override fun onException(errors: List<Exception>) {
+            showComicsFetchErrorDialog()
         }
     }
 
 
     companion object {
         const val LOG_TAG = "ImagesListActivity"
-        const val COMICS_TO_ADD = 30
+        const val COMICS_TO_ADD = 20
     }
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
+
     private var twoPane = false
 
     private lateinit var adapter: PictureRecyclerViewAdapter
@@ -186,14 +183,14 @@ class ImagesListActivity : AppCompatActivity() {
     }
 
     override fun unbindService(connection: ServiceConnection) {
-        super.unbindService(serviceConnection)
+        if (binder != null) {
+            super.unbindService(serviceConnection)
+        }
         binder = null
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (binder != null) {
-            unbindService(serviceConnection)
-        }
+        unbindService(serviceConnection)
     }
 }

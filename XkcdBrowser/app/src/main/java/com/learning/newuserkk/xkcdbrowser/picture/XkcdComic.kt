@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.learning.newuserkk.xkcdbrowser.picture.asynctask.DownloadBitmapAsyncTask
 import kotlinx.android.parcel.Parcelize
 import java.io.*
+import java.lang.IllegalStateException
 import java.net.URL
 
 @Parcelize
@@ -34,14 +35,21 @@ data class XkcdComic
         const val LOG_TAG = "XkcdComic"
     }
 
-    @Throws(SecurityException::class, IOException::class)
-    fun fetchBitmap(toPath: String): Bitmap? {
+    @Throws(SecurityException::class, IOException::class, IllegalStateException::class)
+    fun fetchBitmap(toPath: String): Bitmap {
         val localFile = File(toPath)
         val localPath = localFile.absolutePath
 
         if (localFile.exists()) {
             Log.d(LOG_TAG, "Loading saved picture from $localPath")
-            return BitmapFactory.decodeFile(localPath)
+            val bitmap = BitmapFactory.decodeFile(localPath)
+            if (bitmap != null) {
+                return bitmap
+            }
+            if (!localFile.delete()) {
+                throw SecurityException("Couldn't delete file $localPath")
+            }
+            Log.d(LOG_TAG, "Couldn't decode bitmap for #$id, trying to reload")
         }
 
         if (!localFile.parentFile.exists() && !localFile.parentFile.mkdirs()) {
@@ -64,5 +72,6 @@ data class XkcdComic
         Log.d(DownloadBitmapAsyncTask.LOG_TAG,"Done fetching from $imgLink")
         Log.d(DownloadBitmapAsyncTask.LOG_TAG, "Saved to $toPath")
         return BitmapFactory.decodeFile(toPath)
+                ?: throw IllegalStateException("Couldn't decode loaded picture for #$id")
     }
 }

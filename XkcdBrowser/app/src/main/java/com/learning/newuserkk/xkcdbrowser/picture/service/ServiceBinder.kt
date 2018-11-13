@@ -9,8 +9,8 @@ class ServiceBinder<T>(private val service: BaseService<T>): Binder() {
         Handler(Looper.getMainLooper()).post {
             service.callback = callback
             while (!service.responses.isEmpty()) {
-                val item = service.responses.remove()
-                callback.onLoad(item)
+                val response = service.responses.remove()
+                response.handle(callback)
             }
         }
     }

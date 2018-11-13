@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
+import java.lang.IllegalStateException
 import java.util.*
 
 
@@ -15,13 +16,15 @@ abstract class BaseService<T>(name: String): IntentService(name) {
         const val LOG_TAG = "BaseService"
     }
 
-    val responses = ArrayDeque<T>()
+    // no need to use blocking?
+    val responses = ArrayDeque<Response<T>>()
     var callback: LoadCallback<T>? = null
 
     protected val mainHandler = Handler(Looper.getMainLooper())
 
-    protected fun deliver(item: T?) {
-        callback?.onLoad(item) ?: responses.add(item)
+    protected fun deliver(response: Response<T>) {
+        response.handle(callback)
+        responses.add(response)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
