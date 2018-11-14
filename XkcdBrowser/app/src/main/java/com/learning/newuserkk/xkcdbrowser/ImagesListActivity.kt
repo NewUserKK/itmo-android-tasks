@@ -90,6 +90,7 @@ class ImagesListActivity : AppCompatActivity() {
         Log.d(LOG_TAG, "Found $loadedComicsCount already loaded comics")
         if (loadedComicsCount == 0) {
             fetchStartComics()
+
         } else {
             serviceConnection = getDefaultServiceConnection()
             bindService(Intent(this, FetchComicService::class.java),
@@ -105,11 +106,13 @@ class ImagesListActivity : AppCompatActivity() {
                 val comic = Content.getComicUrl(oldestComicId - i) ?: break
                 FetchComicService.startService(this, comic)
             }
+
             bindService(Intent(this, FetchComicService::class.java),
                     serviceConnection,
                     Context.BIND_AUTO_CREATE)
         }
 
+        // TODO: disabled for now, doesn't work good
         reloadButton.setOnClickListener {
             Content.clear()
             adapter.notifyDataSetChanged()
@@ -140,11 +143,13 @@ class ImagesListActivity : AppCompatActivity() {
     private fun fetchRemainingComics() {
         unbindService(serviceConnection)
         serviceConnection = getDefaultServiceConnection()
+
         val oldestComicId = Content.getOldestComic()?.id ?: return
         for (i in loadedComicsCount until Content.START_COUNT) {
             val comic = Content.getComicUrl(oldestComicId - i) ?: break
             FetchComicService.startService(this, comic)
         }
+
         bindService(Intent(this, FetchComicService::class.java),
                 serviceConnection,
                 Context.BIND_AUTO_CREATE)
@@ -153,6 +158,7 @@ class ImagesListActivity : AppCompatActivity() {
 
     fun fetchStartComics() {
         FetchComicService.startService(this, Content.getComicUrl()!!)
+
         serviceConnection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
                 binder = service as ServiceBinder<XkcdComic>
@@ -163,6 +169,7 @@ class ImagesListActivity : AppCompatActivity() {
                 binder = null
             }
         }
+
         bindService(Intent(this, FetchComicService::class.java),
                 serviceConnection,
                 Context.BIND_AUTO_CREATE)

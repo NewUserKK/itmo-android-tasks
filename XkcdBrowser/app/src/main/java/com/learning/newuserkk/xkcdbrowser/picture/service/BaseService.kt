@@ -16,7 +16,6 @@ abstract class BaseService<T>(name: String): IntentService(name) {
         const val LOG_TAG = "BaseService"
     }
 
-    // no need to use blocking?
     val responses = ArrayDeque<Response<T>>()
     var callback: LoadCallback<T>? = null
 

@@ -29,12 +29,14 @@ open class FetchComicService: BaseService<XkcdComic>("FetchComicService") {
             if (urlString != null) {
                 val exceptions = mutableListOf<Exception>()
                 var item: XkcdComic? = null
+
                 try {
                     item = PictureFetcher.fetch(URL(urlString))
                 } catch (e: IOException) {
                     Log.e(LOG_TAG, e.message)
                     exceptions.add(e)
                 }
+
                 mainHandler.post {
                     deliver(Response(item, exceptions))
                 }

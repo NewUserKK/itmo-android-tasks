@@ -32,6 +32,7 @@ class DownloadBitmapService: BaseService<Bitmap>("DownloadBitmapService") {
             if (item != null && path != null) {
                 val exceptions = mutableListOf<Exception>()
                 var bitmap: Bitmap? = null
+
                 try {
                     bitmap = item.fetchBitmap(path)
                 } catch (e: SecurityException) {
@@ -41,6 +42,7 @@ class DownloadBitmapService: BaseService<Bitmap>("DownloadBitmapService") {
                     Log.e(LOG_TAG, e.message)
                     exceptions.add(e)
                 }
+
                 mainHandler.post {
                     deliver(Response(bitmap, exceptions))
                 }
