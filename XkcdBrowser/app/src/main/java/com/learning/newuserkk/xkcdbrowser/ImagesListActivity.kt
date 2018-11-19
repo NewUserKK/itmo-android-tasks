@@ -13,15 +13,13 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.widget.Adapter
 import android.widget.Toast
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import com.learning.newuserkk.xkcdbrowser.picture.service.FetchComicService
 import com.learning.newuserkk.xkcdbrowser.picture.service.LoadCallback
 import com.learning.newuserkk.xkcdbrowser.picture.service.ServiceBinder
-import kotlinx.android.synthetic.main.activity_images_list.*
+import kotlinx.android.synthetic.main.list_activity.*
 import kotlinx.android.synthetic.main.images_list.*
-import java.io.IOException
 
 
 class ImagesListActivity : AppCompatActivity() {
@@ -70,7 +68,7 @@ class ImagesListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_images_list)
+        setContentView(R.layout.list_activity)
 
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(INTERNET) != PackageManager.PERMISSION_GRANTED) {
@@ -79,7 +77,7 @@ class ImagesListActivity : AppCompatActivity() {
         }
 
         // present only in large-screen layouts
-        if (images_detail_container != null) {
+        if (detailsContainer != null) {
             twoPane = true
         }
 

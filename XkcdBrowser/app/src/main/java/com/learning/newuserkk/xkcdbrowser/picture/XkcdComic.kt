@@ -69,8 +69,8 @@ data class XkcdComic
         inputStream.close()
         outputStream.close()
 
-        Log.d(DownloadBitmapAsyncTask.LOG_TAG,"Done fetching from $imgLink")
-        Log.d(DownloadBitmapAsyncTask.LOG_TAG, "Saved to $toPath")
+        Log.d(LOG_TAG,"Done fetching from $imgLink")
+        Log.d(LOG_TAG, "Saved to $toPath")
         return BitmapFactory.decodeFile(toPath)
                 ?: throw IllegalStateException("Couldn't decode loaded picture for #$id")
     }

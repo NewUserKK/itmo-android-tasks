@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.View
 import com.learning.newuserkk.xkcdbrowser.R
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
-import kotlinx.android.synthetic.main.image_detail.view.*
+import kotlinx.android.synthetic.main.comic_details.view.*
 import java.io.IOException
 import java.lang.ref.WeakReference
 

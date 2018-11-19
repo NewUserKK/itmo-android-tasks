@@ -23,7 +23,7 @@
         android:layout_marginRight="16dp"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         tools:context="com.learning.newuserkk.xkcdbrowser.ImagesListActivity"
-        tools:listitem="@layout/images_list_content" />
+        tools:listitem="@layout/images_list_item" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -33,7 +33,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/images_detail_container" />
+            android:id="@+id/detailsContainer" />
     </ScrollView>
 
 

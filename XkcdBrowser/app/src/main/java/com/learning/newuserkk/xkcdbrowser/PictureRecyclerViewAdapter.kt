@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
-import kotlinx.android.synthetic.main.images_list_content.view.*
+import kotlinx.android.synthetic.main.images_list_item.view.*
 
 
 class PictureRecyclerViewAdapter(private val parentActivity: ImagesListActivity,
@@ -42,7 +42,7 @@ class PictureRecyclerViewAdapter(private val parentActivity: ImagesListActivity,
                 }
                 parentActivity.supportFragmentManager
                         .beginTransaction()
-                        .replace(R.id.images_detail_container, fragment)
+                        .replace(R.id.detailsContainer, fragment)
                         .commit()
             } else {
                 val intent = Intent(view.context, ImagesDetailActivity::class.java).apply {
@@ -55,7 +55,7 @@ class PictureRecyclerViewAdapter(private val parentActivity: ImagesListActivity,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.images_list_content, parent, false)
+                .inflate(R.layout.images_list_item, parent, false)
         return ViewHolder(view)
     }
 

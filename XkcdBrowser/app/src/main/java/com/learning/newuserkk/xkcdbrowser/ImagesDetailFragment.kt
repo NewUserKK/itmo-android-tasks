@@ -17,7 +17,7 @@ import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import com.learning.newuserkk.xkcdbrowser.picture.service.DownloadBitmapService
 import com.learning.newuserkk.xkcdbrowser.picture.service.LoadCallback
 import com.learning.newuserkk.xkcdbrowser.picture.service.ServiceBinder
-import kotlinx.android.synthetic.main.image_detail.*
+import kotlinx.android.synthetic.main.comic_details.*
 import java.io.IOException
 import java.lang.IllegalStateException
 
@@ -107,7 +107,7 @@ class ImagesDetailFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.image_detail, container, false)
+        val rootView = inflater.inflate(R.layout.comic_details, container, false)
 
         comic?.let {
             val path = context?.cacheDir?.absolutePath + "/${it.id}.png"

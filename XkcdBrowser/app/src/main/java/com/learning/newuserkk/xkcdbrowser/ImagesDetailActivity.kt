@@ -3,7 +3,10 @@ package com.learning.newuserkk.xkcdbrowser
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
+import kotlinx.android.synthetic.main.detail_activity.*
 
 /**
  * An activity representing a single Images detail screen. This
@@ -19,7 +22,7 @@ class ImagesDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_images_detail)
+        setContentView(R.layout.detail_activity)
 
         if (savedInstanceState == null) {
             val fragment = ImagesDetailFragment().apply {
@@ -30,9 +33,20 @@ class ImagesDetailActivity : AppCompatActivity() {
             }
 
             supportFragmentManager.beginTransaction()
-                    .add(R.id.images_detail_container, fragment)
+                    .add(R.id.detailsContainer, fragment)
                     .commit()
         }
+
+        detailsContainer.setOnTouchListener(object : OnSwipeTouchListener(this@ImagesDetailActivity) {
+            override fun onSwipeRight() {
+                Log.d(LOG_TAG, "Detected right swipe")
+                Toast.makeText(this@ImagesDetailActivity, "right", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onSwipeLeft() {
+                Toast.makeText(this@ImagesDetailActivity, "left", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem) =
