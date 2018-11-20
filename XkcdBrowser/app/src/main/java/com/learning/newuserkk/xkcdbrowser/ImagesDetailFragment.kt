@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import com.learning.newuserkk.xkcdbrowser.picture.service.DownloadBitmapService
 import com.learning.newuserkk.xkcdbrowser.picture.service.LoadCallback
@@ -90,13 +91,14 @@ class ImagesDetailFragment : Fragment() {
                 activity?.title = comic?.title
             }
         }
+        Log.d(LOG_TAG, "onCreate finished")
     }
 
     private fun setupServiceConnection() {
         serviceConnection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
                 binder = service as ServiceBinder<Bitmap>
-                binder!!.setCallback(BitmapLoadCallback())
+                binder?.setCallback(BitmapLoadCallback())
             }
 
             override fun onServiceDisconnected(name: ComponentName?) {
@@ -107,14 +109,41 @@ class ImagesDetailFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        Log.d(LOG_TAG, "onCreateView started")
         val rootView = inflater.inflate(R.layout.comic_details, container, false)
 
-        comic?.let {
-            val path = context?.cacheDir?.absolutePath + "/${it.id}.png"
-            DownloadBitmapService.startService(rootView.context, it, path)
-            context?.bindService(Intent(context, DownloadBitmapService::class.java),
-                    serviceConnection,
-                    Context.BIND_AUTO_CREATE)
+        comic?.let { comic ->
+            context?.let {context ->
+                val path = context.cacheDir?.absolutePath + "/${comic.id}.png"
+                DownloadBitmapService.startService(rootView.context, comic, path)
+                context.bindService(Intent(context, DownloadBitmapService::class.java),
+                        serviceConnection,
+                        Context.BIND_AUTO_CREATE)
+
+                container?.setOnTouchListener(object : OnSwipeTouchListener(rootView.context) {
+                    override fun onSwipeRight() {
+                        Log.d(LOG_TAG, "Detected right swipe")
+                        if (!comic.isOldest) {
+                            replaceFragment(comic.id - 1)
+                        } else {
+                            Toast.makeText(context,
+                                    getString(R.string.oldestComicReachedOnSwipe),
+                                    Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onSwipeLeft() {
+                        Log.d(LOG_TAG, "Detected left swipe")
+                        if (!comic.isLatest) {
+                            replaceFragment(comic.id + 1)
+                        } else {
+                            Toast.makeText(context,
+                                    getString(R.string.latestComicReachedOnSwipe),
+                                    Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                })
+            }
         }
 
         return rootView
@@ -125,5 +154,16 @@ class ImagesDetailFragment : Fragment() {
         if (binder != null) {
             context?.unbindService(serviceConnection)
         }
+    }
+
+    private fun replaceFragment(comicId: Int) {
+        val fragment = ImagesDetailFragment().apply {
+            arguments = Bundle().apply {
+                putInt(ImagesDetailFragment.ARG_ITEM_ID, comicId)
+            }
+        }
+        fragmentManager?.beginTransaction()
+                ?.replace(R.id.detailsContainer, fragment)
+                ?.commit()
     }
 }

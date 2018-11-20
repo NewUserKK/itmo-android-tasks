@@ -6,6 +6,7 @@ import android.os.Parcelable
 import android.util.Log
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.learning.newuserkk.xkcdbrowser.Content
 import com.learning.newuserkk.xkcdbrowser.picture.asynctask.DownloadBitmapAsyncTask
 import kotlinx.android.parcel.Parcelize
 import java.io.*
@@ -34,6 +35,11 @@ data class XkcdComic
     companion object {
         const val LOG_TAG = "XkcdComic"
     }
+
+    val isLatest
+        get() = (id == Content.getLatestComic()?.id)
+    val isOldest
+        get() = (id == 0)
 
     @Throws(SecurityException::class, IOException::class, IllegalStateException::class)
     fun fetchBitmap(toPath: String): Bitmap {
