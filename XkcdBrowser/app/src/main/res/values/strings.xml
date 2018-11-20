@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">XkcdBrowser</string>
     <string name="title_images_list" translatable="false">Xkcd Browser</string>
+    <string name="title_images_detail">Comic Detail</string>
     <string name="detailsComicDescription" translatable="false">%1$s</string>
     <string name="detailsComicDate" translatable="false">%1$d.%2$d.%3$d</string>
     <string name="getMoreComics">Get %1$d more</string>
@@ -10,7 +11,7 @@
     <string name="reloadMessage">Reload</string>
     <string name="exitMessage">Exit</string>
     <string name="loadPictureErrorMessage">Couldn\'t fetch picture! Check your internet connection and try again</string>
-    <string name="okMessage" translatable="false">OK</string>
+    <string name="okMessage">OK</string>
     <string name="loadComicJsonErrorMessage">Couldn\'t load some comics</string>
     <string name="savePictureErrorMessage">Couldn\'t save picture! Check if you have sufficient permissions.</string>
     <string name="decodePictureErrorMessage">Couldn\'t decode picture! Try to clear app cache and try again.</string>
