@@ -91,7 +91,6 @@ class ImagesDetailFragment : Fragment() {
                 activity?.title = comic?.title
             }
         }
-        Log.d(LOG_TAG, "onCreate finished")
     }
 
     private fun setupServiceConnection() {
@@ -109,7 +108,6 @@ class ImagesDetailFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        Log.d(LOG_TAG, "onCreateView started")
         val rootView = inflater.inflate(R.layout.comic_details, container, false)
 
         comic?.let { comic ->
@@ -124,11 +122,12 @@ class ImagesDetailFragment : Fragment() {
                     override fun onSwipeRight() {
                         Log.d(LOG_TAG, "Detected right swipe")
                         if (!comic.isOldest) {
+                            if (comic.id == Content.oldestLoadedComic?.id) {
+
+                            }
                             replaceFragment(comic.id - 1)
                         } else {
-                            Toast.makeText(context,
-                                    getString(R.string.oldestComicReachedOnSwipe),
-                                    Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, getString(R.string.oldestComicReachedOnSwipe), Toast.LENGTH_SHORT).show()
                         }
                     }
 
@@ -137,9 +136,7 @@ class ImagesDetailFragment : Fragment() {
                         if (!comic.isLatest) {
                             replaceFragment(comic.id + 1)
                         } else {
-                            Toast.makeText(context,
-                                    getString(R.string.latestComicReachedOnSwipe),
-                                    Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, getString(R.string.latestComicReachedOnSwipe), Toast.LENGTH_SHORT).show()
                         }
                     }
                 })

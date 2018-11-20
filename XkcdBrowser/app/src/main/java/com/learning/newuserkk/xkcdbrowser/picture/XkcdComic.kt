@@ -37,7 +37,7 @@ data class XkcdComic
     }
 
     val isLatest
-        get() = (id == Content.getLatestComic()?.id)
+        get() = (id == Content.latestLoadedComic?.id)
     val isOldest
         get() = (id == 0)
 

@@ -99,11 +99,10 @@ class ImagesListActivity : AppCompatActivity() {
 
         addComicsButton.text = getString(R.string.getMoreComics, COMICS_TO_ADD)
         addComicsButton.setOnClickListener {
-            val oldestComicId = Content.getOldestComic()?.id ?: return@setOnClickListener
-            for (i in 1..COMICS_TO_ADD) {
-                val comic = Content.getComicUrl(oldestComicId - i) ?: break
-                FetchComicService.startService(this, comic)
-            }
+            val oldestComicId = Content.oldestLoadedComic?.id
+                    ?: return@setOnClickListener
+
+            Loader.load(this, oldestComicId - 1, COMICS_TO_ADD)
 
             bindService(Intent(this, FetchComicService::class.java),
                     serviceConnection,
@@ -139,14 +138,12 @@ class ImagesListActivity : AppCompatActivity() {
     }
 
     private fun fetchRemainingComics() {
+        val oldestComicId = Content.oldestLoadedComic?.id
+                ?: return
+
         unbindService(serviceConnection)
         serviceConnection = getDefaultServiceConnection()
-
-        val oldestComicId = Content.getOldestComic()?.id ?: return
-        for (i in loadedComicsCount until Content.START_COUNT) {
-            val comic = Content.getComicUrl(oldestComicId - i) ?: break
-            FetchComicService.startService(this, comic)
-        }
+        Loader.load(this, oldestComicId, Content.START_COUNT - 1)
 
         bindService(Intent(this, FetchComicService::class.java),
                 serviceConnection,
@@ -155,7 +152,7 @@ class ImagesListActivity : AppCompatActivity() {
 
 
     fun fetchStartComics() {
-        FetchComicService.startService(this, Content.getComicUrl()!!)
+        Loader.load(this, -1)
 
         serviceConnection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {

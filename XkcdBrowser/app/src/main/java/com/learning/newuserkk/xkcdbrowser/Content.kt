@@ -21,16 +21,13 @@ object Content {
             }
     )
 
-    fun getLatestComic(): XkcdComic? {
-        return if (ITEMS.size > 0) ITEMS[0] else null
-    }
+    val latestLoadedComic
+        get() = if (ITEMS.size > 0) ITEMS[0] else null
+    val oldestLoadedComic
+        get() = if (ITEMS.size > 0) ITEMS[ITEMS.size - 1] else null
 
-    fun getOldestComic(): XkcdComic? {
-        return if (ITEMS.size > 0) ITEMS[ITEMS.size - 1] else null
-    }
-
-    fun getComicUrl(number: Int?=null): URL? {
-        if (number == null) {
+    fun getComicUrl(number: Int = -1): URL? {
+        if (number == -1) {
             return URL("$BASE_URL/$BASE_URL_FILE_NAME")
         }
         if (number < 0) {
