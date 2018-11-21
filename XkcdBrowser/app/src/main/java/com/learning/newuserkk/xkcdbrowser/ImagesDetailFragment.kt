@@ -122,10 +122,13 @@ class ImagesDetailFragment : Fragment() {
                     override fun onSwipeRight() {
                         Log.d(LOG_TAG, "Detected right swipe")
                         if (!comic.isOldest) {
+                            // TODO: add proper load
                             if (comic.id == Content.oldestLoadedComic?.id) {
-
+//                                Loader.load(context, comic.id - 1)
+                                Toast.makeText(context, getString(R.string.debug_oldestLoadedComicReachedOnSwipe), Toast.LENGTH_SHORT).show()
+                            } else {
+                                replaceFragment(comic.id - 1)
                             }
-                            replaceFragment(comic.id - 1)
                         } else {
                             Toast.makeText(context, getString(R.string.oldestComicReachedOnSwipe), Toast.LENGTH_SHORT).show()
                         }

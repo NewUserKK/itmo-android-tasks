@@ -3,6 +3,7 @@ package com.learning.newuserkk.xkcdbrowser.picture.service
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.learning.newuserkk.xkcdbrowser.Content
 import com.learning.newuserkk.xkcdbrowser.picture.PictureFetcher
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import java.io.IOException
@@ -32,11 +33,11 @@ open class FetchComicService: BaseService<XkcdComic>("FetchComicService") {
 
                 try {
                     item = PictureFetcher.fetch(URL(urlString))
+                    Content.addItem(item)
                 } catch (e: IOException) {
                     Log.e(LOG_TAG, e.message)
                     exceptions.add(e)
                 }
-
                 mainHandler.post {
                     deliver(Response(item, exceptions))
                 }

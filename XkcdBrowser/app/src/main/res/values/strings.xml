@@ -17,4 +17,5 @@
     <string name="decodePictureErrorMessage">Couldn\'t decode picture! Try to clear app cache and try again.</string>
     <string name="oldestComicReachedOnSwipe">You\'ve reached the oldest comic</string>
     <string name="latestComicReachedOnSwipe">You\'ve reached the latest comic</string>
+    <string name="debug_oldestLoadedComicReachedOnSwipe">Older comics not loaded, load them from comics list first</string>
 </resources>
