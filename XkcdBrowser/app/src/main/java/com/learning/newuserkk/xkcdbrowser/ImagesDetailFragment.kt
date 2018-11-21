@@ -24,7 +24,7 @@ import java.io.IOException
  */
 class ImagesDetailFragment : Fragment() {
 
-    inner class BitmapLoadCallback: Callback {
+    inner class BitmapLoadCallback(private val rootView: View): Callback {
         override fun onSuccess() {
             val comic = comic
             if (comic == null) {
@@ -33,10 +33,11 @@ class ImagesDetailFragment : Fragment() {
             }
 
             Log.d(ImagesListActivity.LOG_TAG, "Loaded picture of #${comic.id}")
-            detailsComicPicture.contentDescription =
+            rootView.detailsComicPicture.contentDescription =
                     resources.getString(R.string.detailsComicDescription, comic.alt)
-            detailsComicDescription.text = detailsComicDescription.contentDescription
-            detailsComicDate.text = resources.getString(
+            rootView.detailsComicDescription.text =
+                    resources.getString(R.string.detailsComicDescription, comic.alt)
+            rootView.detailsComicDate.text = resources.getString(
                     R.string.detailsComicDate,
                     comic.day,
                     comic.month,
@@ -88,8 +89,7 @@ class ImagesDetailFragment : Fragment() {
                     Picasso.get()
                             .load(comic.imgLink)
                             .tag(LOG_TAG)
-                            .placeholder(R.drawable.ic_launcher_background)
-                            .into(detailsComicPicture, BitmapLoadCallback())
+                            .into(detailsComicPicture, BitmapLoadCallback(rootView))
 
                     container?.setOnTouchListener(object : OnSwipeTouchListener(rootView.context) {
                         override fun onSwipeRight() {
