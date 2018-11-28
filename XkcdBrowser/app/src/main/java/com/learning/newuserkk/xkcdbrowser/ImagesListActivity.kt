@@ -154,7 +154,7 @@ class ImagesListActivity : AppCompatActivity() {
         serviceConnection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
                 binder = service as ServiceBinder<XkcdComic>
-                binder!!.setCallback(LoadHeadComicCallback())
+                binder?.setCallback(LoadHeadComicCallback())
             }
 
             override fun onServiceDisconnected(name: ComponentName?) {

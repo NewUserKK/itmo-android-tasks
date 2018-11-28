@@ -13,4 +13,6 @@ interface XkcdApiService {
             @Path("id") id: Int
     ): Call<XkcdComic>
 
+    @GET(Content.BASE_URL_FILE_NAME)
+    fun getHeadComic(): Call<XkcdComic>
 }

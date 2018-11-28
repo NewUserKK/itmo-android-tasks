@@ -20,12 +20,14 @@ object Loader {
      * Load [count] comics from given id inclusively
      */
     fun load(ctx: Context, from: Int, count: Int = 1) {
+        val service = PictureFetcher.retrofit.create(XkcdApiService::class.java)
         for (i in 0 until count) {
-//            val comic = Content.getComicUrl(from - i)
-//                    ?: break
-//            FetchComicService.startService(ctx, comic)
-            val service = PictureFetcher.retrofit.create(XkcdApiService::class.java)
-            service.getComic(from - i).enqueue(object : Callback<XkcdComic> {
+            val call = if (from == -1) {
+                service.getHeadComic()
+            } else {
+                service.getComic(from - i)
+            }
+            call.enqueue(object : Callback<XkcdComic> {
                 override fun onFailure(call: Call<XkcdComic>, t: Throwable) {
                     // pass
                 }
@@ -44,6 +46,12 @@ object Loader {
                     }
                 }
             })
+        }
+        for (i in 0 until count) {
+//            val comic = Content.getComicUrl(from - i)
+//                    ?: break
+//            FetchComicService.startService(ctx, comic)
+
         }
     }
 }
