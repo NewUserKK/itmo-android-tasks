@@ -19,7 +19,10 @@ object Loader {
     /**
      * Load [count] comics from given id inclusively
      */
-    fun load(ctx: Context, from: Int, count: Int = 1) {
+    fun load(from: Int,
+             count: Int = 1,
+             callback: (item: XkcdComic) -> Unit) {
+
         val service = PictureFetcher.retrofit.create(XkcdApiService::class.java)
         for (i in 0 until count) {
             val call = if (from == -1) {
@@ -27,31 +30,31 @@ object Loader {
             } else {
                 service.getComic(from - i)
             }
+
             call.enqueue(object : Callback<XkcdComic> {
                 override fun onFailure(call: Call<XkcdComic>, t: Throwable) {
                     // pass
                 }
 
                 override fun onResponse(call: Call<XkcdComic>, response: Response<XkcdComic>) {
-                    Log.d(LOG_TAG, "Got response, response code ${response.code()}")
-                    Log.d(LOG_TAG, "URL: ${call.request().url()}")
-                    if (response.isSuccessful) {
-                        val handler = Handler(Looper.getMainLooper())
-                        val item = response.body()!!
-                        handler.post {
-                            Log.d(ImagesListActivity.LOG_TAG, "Got #${item.id}")
-                            Content.addItem(item)
-                            (ctx as ImagesListActivity).notifyAdapter()
-                        }
-                    }
+                    defaultResponse(call, response, callback)
                 }
             })
         }
-        for (i in 0 until count) {
-//            val comic = Content.getComicUrl(from - i)
-//                    ?: break
-//            FetchComicService.startService(ctx, comic)
+    }
 
+    private fun defaultResponse(call: Call<XkcdComic>,
+                                response: Response<XkcdComic>,
+                                callback: (item: XkcdComic) -> Unit) {
+        if (response.isSuccessful) {
+            val handler = Handler(Looper.getMainLooper())
+            val item = response.body()!!
+            handler.post {
+                callback(item)
+            }
+        } else {
+            Log.d(LOG_TAG, "Got response, response code ${response.code()}")
+            Log.d(LOG_TAG, "URL: ${call.request().url()}")
         }
     }
 }
