@@ -194,7 +194,6 @@ class ImagesListActivity : AppCompatActivity() {
     }
 
     fun notifyAdapter() {
-        adapter.notifyItemInserted(Content.ITEMS.size - 1)
-//        adapter.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 }
