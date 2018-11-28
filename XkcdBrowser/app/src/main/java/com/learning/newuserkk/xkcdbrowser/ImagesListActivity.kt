@@ -14,7 +14,9 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.Toast
+import com.learning.newuserkk.xkcdbrowser.picture.PictureFetcher
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
+import com.learning.newuserkk.xkcdbrowser.picture.retrofit.XkcdApiService
 import com.learning.newuserkk.xkcdbrowser.picture.service.FetchComicService
 import com.learning.newuserkk.xkcdbrowser.picture.service.LoadCallback
 import com.learning.newuserkk.xkcdbrowser.picture.service.ServiceBinder
@@ -138,22 +140,17 @@ class ImagesListActivity : AppCompatActivity() {
     }
 
     private fun fetchRemainingComics() {
-        val oldestComicId = Content.oldestLoadedComic?.id
-                ?: return
+        val oldestComicId = Content.oldestLoadedComic?.id ?: return
 
-        unbindService(serviceConnection)
-        serviceConnection = getDefaultServiceConnection()
+        val service = PictureFetcher.retrofit.create(XkcdApiService::class.java)
         Loader.load(this, oldestComicId, Content.START_COUNT - 1)
-
-        bindService(Intent(this, FetchComicService::class.java),
-                serviceConnection,
-                Context.BIND_AUTO_CREATE)
     }
 
 
     fun fetchStartComics() {
-        Loader.load(this, -1)
-
+//        Loader.load(this, -1)
+        val comic = Content.getComicUrl()
+        FetchComicService.startService(this, comic!!)
         serviceConnection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
                 binder = service as ServiceBinder<XkcdComic>
@@ -194,5 +191,10 @@ class ImagesListActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         unbindService(serviceConnection)
+    }
+
+    fun notifyAdapter() {
+        adapter.notifyItemInserted(Content.ITEMS.size - 1)
+//        adapter.notifyDataSetChanged()
     }
 }

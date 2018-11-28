@@ -9,8 +9,8 @@ object Content {
 
     const val START_COUNT = 30
 
-    private const val BASE_URL = "https://xkcd.com"
-    private const val BASE_URL_FILE_NAME = "info.0.json"
+    const val BASE_URL = "https://xkcd.com"
+    const val BASE_URL_FILE_NAME = "info.0.json"
 
     private const val LOG_TAG = "Content"
 

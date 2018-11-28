@@ -124,11 +124,6 @@ class ImagesDetailFragment : Fragment() {
         return rootView
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Picasso.get().cancelTag(LOG_TAG)
-    }
-
     private fun replaceFragment(comicId: Int) {
         val fragment = ImagesDetailFragment().apply {
             arguments = Bundle().apply {
