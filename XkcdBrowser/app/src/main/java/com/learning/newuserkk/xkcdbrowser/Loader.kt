@@ -1,13 +1,10 @@
 package com.learning.newuserkk.xkcdbrowser
 
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.learning.newuserkk.xkcdbrowser.picture.PictureFetcher
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import com.learning.newuserkk.xkcdbrowser.picture.retrofit.XkcdApiService
-import com.learning.newuserkk.xkcdbrowser.picture.service.FetchComicService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,7 +20,7 @@ object Loader {
              count: Int = 1,
              callback: (item: XkcdComic) -> Unit) {
 
-        val service = PictureFetcher.retrofit.create(XkcdApiService::class.java)
+        val service = XkcdBrowser.retrofit.create(XkcdApiService::class.java)
         for (i in 0 until count) {
             val call = if (from == -1) {
                 service.getHeadComic()

@@ -8,9 +8,9 @@ class XkcdBrowser: Application() {
 
     companion object {
         const val LOG_TAG = "Application"
+        lateinit var retrofit: Retrofit
     }
 
-    lateinit var retrofit: Retrofit
 
     override fun onCreate() {
         super.onCreate()

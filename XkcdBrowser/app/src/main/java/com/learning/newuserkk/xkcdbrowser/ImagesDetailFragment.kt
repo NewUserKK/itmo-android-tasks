@@ -11,7 +11,6 @@ import android.widget.Toast
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.comic_details.*
 import kotlinx.android.synthetic.main.comic_details.view.*
 import java.io.IOException
 

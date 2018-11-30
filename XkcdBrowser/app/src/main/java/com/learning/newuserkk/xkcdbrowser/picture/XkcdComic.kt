@@ -8,8 +8,9 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.learning.newuserkk.xkcdbrowser.Content
 import kotlinx.android.parcel.Parcelize
-import java.io.*
-import java.lang.IllegalStateException
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.net.URL
 
 @Parcelize

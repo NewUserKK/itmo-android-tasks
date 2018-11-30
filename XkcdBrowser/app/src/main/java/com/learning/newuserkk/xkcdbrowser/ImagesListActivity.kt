@@ -1,27 +1,15 @@
 package com.learning.newuserkk.xkcdbrowser
 
 import android.Manifest.permission.INTERNET
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.IBinder
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.widget.Toast
-import com.learning.newuserkk.xkcdbrowser.picture.PictureFetcher
-import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
-import com.learning.newuserkk.xkcdbrowser.picture.retrofit.XkcdApiService
-import com.learning.newuserkk.xkcdbrowser.picture.service.FetchComicService
-import com.learning.newuserkk.xkcdbrowser.picture.service.LoadCallback
-import com.learning.newuserkk.xkcdbrowser.picture.service.ServiceBinder
-import kotlinx.android.synthetic.main.list_activity.*
 import kotlinx.android.synthetic.main.images_list.*
+import kotlinx.android.synthetic.main.list_activity.*
 
 
 class ImagesListActivity : AppCompatActivity() {

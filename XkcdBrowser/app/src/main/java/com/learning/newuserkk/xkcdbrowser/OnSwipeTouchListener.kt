@@ -1,10 +1,9 @@
 package com.learning.newuserkk.xkcdbrowser
 
 import android.content.Context
-import android.view.MotionEvent
-import android.view.GestureDetector.SimpleOnGestureListener
-import android.text.method.Touch.onTouchEvent
 import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
+import android.view.MotionEvent
 import android.view.View
 
 
