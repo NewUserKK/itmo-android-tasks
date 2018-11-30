@@ -65,10 +65,11 @@ class ImagesListActivity : AppCompatActivity() {
 
         // TODO: disabled for now, doesn't work good
         reloadButton.setOnClickListener {
-            Loader.cancelAll()
-            Content.clear()
-            adapter.notifyDataSetChanged()
-            fetchStartComics()
+            Loader.cancelAll {
+                Content.clear()
+                adapter.notifyDataSetChanged()
+                fetchStartComics()
+            }
         }
 
     }
@@ -79,6 +80,15 @@ class ImagesListActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
+    private fun fetchStartComics() {
+        Loader.load(-1) {item ->
+            Log.d(ImagesListActivity.LOG_TAG, "Got #${item.id}")
+            Content.addItem(item)
+            notifyAdapter()
+            fetchRemainingComics()
+        }
+    }
+
     private fun fetchRemainingComics() {
         val oldestComicId = Content.oldestLoadedComic?.id ?: return
 
@@ -86,15 +96,6 @@ class ImagesListActivity : AppCompatActivity() {
             Log.d(ImagesListActivity.LOG_TAG, "Got #${item.id}")
             Content.addItem(item)
             notifyAdapter()
-        }
-    }
-
-    fun fetchStartComics() {
-        Loader.load(-1) {item ->
-            Log.d(ImagesListActivity.LOG_TAG, "Got #${item.id}")
-            Content.addItem(item)
-            notifyAdapter()
-            fetchRemainingComics()
         }
     }
 
@@ -110,10 +111,6 @@ class ImagesListActivity : AppCompatActivity() {
                     this.finish()
                 }
                 .show()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     fun notifyAdapter() {

@@ -9,6 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.HashMap
 
 object Loader {
@@ -48,17 +49,21 @@ object Loader {
         }
     }
 
-    fun cancelAll() {
+    fun cancelAll(callback: () -> Unit = {}) {
         for (query in queries) {
-            val (callId, call) = query
+            val (id, call) = query
+            Log.d(LOG_TAG, "Cancelled request $id")
             call.cancel()
         }
         queries.clear()
+        Log.d(LOG_TAG, "Cancelled all queries")
+        callback()
     }
 
     private fun defaultResponse(call: Call<XkcdComic>,
                                 response: Response<XkcdComic>,
                                 callback: (item: XkcdComic) -> Unit) {
+        Log.d(LOG_TAG, "Got response, response code ${response.code()}")
         if (response.isSuccessful) {
             val handler = Handler(Looper.getMainLooper())
             val item = response.body()!!
@@ -66,7 +71,6 @@ object Loader {
                 callback(item)
             }
         } else {
-            Log.d(LOG_TAG, "Got response, response code ${response.code()}")
             Log.d(LOG_TAG, "URL: ${call.request().url()}")
         }
     }
