@@ -8,11 +8,16 @@ import com.learning.newuserkk.xkcdbrowser.picture.retrofit.XkcdApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.HashMap
 
 object Loader {
 
     const val LOG_TAG = "Loader"
 
+    val queries = HashMap<Int, Call<XkcdComic>>()
+
+    var id = 0
     /**
      * Load [count] comics from given id inclusively
      */
@@ -28,16 +33,27 @@ object Loader {
                 service.getComic(from - i)
             }
 
+            queries[id++] = call
             call.enqueue(object : Callback<XkcdComic> {
                 override fun onFailure(call: Call<XkcdComic>, t: Throwable) {
                     // pass
+                    queries.remove(id)
                 }
 
                 override fun onResponse(call: Call<XkcdComic>, response: Response<XkcdComic>) {
                     defaultResponse(call, response, callback)
+                    queries.remove(id)
                 }
             })
         }
+    }
+
+    fun cancelAll() {
+        for (query in queries) {
+            val (callId, call) = query
+            call.cancel()
+        }
+        queries.clear()
     }
 
     private fun defaultResponse(call: Call<XkcdComic>,

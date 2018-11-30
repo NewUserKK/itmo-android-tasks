@@ -65,6 +65,7 @@ class ImagesListActivity : AppCompatActivity() {
 
         // TODO: disabled for now, doesn't work good
         reloadButton.setOnClickListener {
+            Loader.cancelAll()
             Content.clear()
             adapter.notifyDataSetChanged()
             fetchStartComics()

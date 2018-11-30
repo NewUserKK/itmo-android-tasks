@@ -40,44 +40,4 @@ data class XkcdComic
         get() = (id == Content.latestLoadedComic?.id)
     val isOldest
         get() = (id == 0)
-
-    @Throws(SecurityException::class, IOException::class, IllegalStateException::class)
-    fun fetchBitmap(toPath: String): Bitmap {
-        val localFile = File(toPath)
-        val localPath = localFile.absolutePath
-
-        if (localFile.exists()) {
-            Log.d(LOG_TAG, "Loading saved picture from $localPath")
-            val bitmap = BitmapFactory.decodeFile(localPath)
-            if (bitmap != null) {
-                return bitmap
-            }
-            if (!localFile.delete()) {
-                throw SecurityException("Couldn't delete file $localPath")
-            }
-            Log.d(LOG_TAG, "Couldn't decode bitmap for #$id, trying to reload")
-        }
-
-        if (!localFile.parentFile.exists() && !localFile.parentFile.mkdirs()) {
-            throw SecurityException("Couldn't make directory $localPath")
-        }
-
-        Log.d(LOG_TAG, "Fetching image from $imgLink...")
-        val inputStream = URL(imgLink).openStream().buffered()
-        val outputStream = FileOutputStream(toPath).buffered()
-
-        var i = inputStream.read()
-        while (i != -1) {
-            outputStream.write(i)
-            i = inputStream.read()
-        }
-
-        inputStream.close()
-        outputStream.close()
-
-        Log.d(LOG_TAG,"Done fetching from $imgLink")
-        Log.d(LOG_TAG, "Saved to $toPath")
-        return BitmapFactory.decodeFile(toPath)
-                ?: throw IllegalStateException("Couldn't decode loaded picture for #$id")
-    }
 }
