@@ -19,4 +19,5 @@
     <string name="latestComicReachedOnSwipe">You\'ve reached the latest comic</string>
     <string name="debug_oldestLoadedComicReachedOnSwipe">Older comics not loaded, load them from comics list first</string>
     <string name="unknownPictureErrorMessage">Unknown error while loading picture</string>
+    <string name="addToFavorite">Add to favorite</string>
 </resources>

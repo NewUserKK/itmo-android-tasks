@@ -23,8 +23,8 @@ class PictureRecyclerViewAdapter(private val parentActivity: ImagesListActivity,
 
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val idView: TextView = view.id_text
-        val contentView: TextView = view.content
+        val idView: TextView = view.listItemId
+        val contentView: TextView = view.listItemTitle
     }
 
 

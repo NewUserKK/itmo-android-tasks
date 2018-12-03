@@ -63,7 +63,7 @@ class ImagesListActivity : AppCompatActivity() {
             }
         }
 
-        // TODO: disabled for now, doesn't work good
+        // TODO: fix bug with multiple clicks
         reloadButton.setOnClickListener {
             Loader.cancelAll {
                 Content.clear()
