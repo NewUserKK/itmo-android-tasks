@@ -6,9 +6,6 @@ import java.util.*
 
 
 object Content {
-
-    const val START_COUNT = 30
-
     const val BASE_URL = "https://xkcd.com"
     const val BASE_URL_FILE_NAME = "info.0.json"
 

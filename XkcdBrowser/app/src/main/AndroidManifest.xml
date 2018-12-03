@@ -31,6 +31,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.learning.newuserkk.xkcdbrowser.ImagesListActivity" />
         </activity>
+
+        <service android:name=".picture.service.FetchComicService" />
     </application>
 
 </manifest>
