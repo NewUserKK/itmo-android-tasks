@@ -1,14 +1,19 @@
 package com.learning.newuserkk.xkcdbrowser
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.recyclerview.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
+import com.learning.newuserkk.xkcdbrowser.picture.favorites.RestoreFavoritesAsyncTask
+import com.learning.newuserkk.xkcdbrowser.picture.favorites.UpdateFavoritesAsyncTask
 import kotlinx.android.synthetic.main.images_list_item.view.*
+import org.jetbrains.anko.imageResource
 
 
 class PictureRecyclerViewAdapter(private val parentActivity: ImagesListActivity,
@@ -18,13 +23,14 @@ class PictureRecyclerViewAdapter(private val parentActivity: ImagesListActivity,
 
 
     companion object {
-        const val LOG_TAG = "PictureRecyclerViewAdapter"
+        const val LOG_TAG = "PictureRecyclerAdapter"
     }
 
 
     inner class ViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         val idView: TextView = view.listItemId
         val contentView: TextView = view.listItemTitle
+        val favoriteButtonView: ImageButton = view.addToFavoriteButton
     }
 
 
@@ -64,11 +70,17 @@ class PictureRecyclerViewAdapter(private val parentActivity: ImagesListActivity,
         holder.apply {
             idView.text = idView.context.resources.getString(R.string.comicId, item.id)
             contentView.text = item.title
+
+            RestoreFavoritesAsyncTask(favoriteButtonView).execute(item)
+            favoriteButtonView.setOnClickListener {
+                Log.d(LOG_TAG, "At favorite listener")
+                UpdateFavoritesAsyncTask(it as ImageButton).execute(item)
+            }
+
             itemView.tag = item
             itemView.setOnClickListener(onClickListener)
         }
     }
 
     override fun getItemCount() = values.size
-
 }

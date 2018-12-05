@@ -1,29 +1,32 @@
 package com.learning.newuserkk.xkcdbrowser.picture
 
 import android.os.Parcelable
+import androidx.room.*
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.learning.newuserkk.xkcdbrowser.Content
 import kotlinx.android.parcel.Parcelize
 
-@Parcelize
+@Entity(tableName = "favorites")
 data class XkcdComic
     @JsonCreator constructor(
-            @JsonProperty("num") val id: Int,
+            @PrimaryKey @JsonProperty("num") val id: Int,
 
-            @JsonProperty("title") val title: String,
-            @JsonProperty("safe_title") val safeTitle: String?,
-            @JsonProperty("link") val link: String?,
-            @JsonProperty("img") val imgLink: String,
+            @ColumnInfo @JsonProperty("title") val title: String,
+            @ColumnInfo @JsonProperty("safe_title") val safeTitle: String?,
+            @ColumnInfo @JsonProperty("link") val link: String?,
+            @ColumnInfo @JsonProperty("img") val imgLink: String,
 
-            @JsonProperty("alt") val alt: String?,
-            @JsonProperty("news") val news: String?,
-            @JsonProperty("transcript") val transcript: String?,
+            @ColumnInfo @JsonProperty("alt") val alt: String?,
+            @ColumnInfo @JsonProperty("news") val news: String?,
+            @ColumnInfo @JsonProperty("transcript") val transcript: String?,
 
-            @JsonProperty("year") val year: Int,
-            @JsonProperty("month") val month: Int,
-            @JsonProperty("day") val day: Int
-    ): Parcelable {
+            @ColumnInfo @JsonProperty("year") val year: Int,
+            @ColumnInfo @JsonProperty("month") val month: Int,
+            @ColumnInfo @JsonProperty("day") val day: Int
+    ) {
 
     companion object {
         const val LOG_TAG = "XkcdComic"
@@ -33,4 +36,5 @@ data class XkcdComic
         get() = (id == Content.latestLoadedComic?.id)
     val isOldest
         get() = (id == 0)
+    var favorite = false
 }

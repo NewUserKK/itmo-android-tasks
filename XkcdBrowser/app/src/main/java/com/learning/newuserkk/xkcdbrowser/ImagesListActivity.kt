@@ -11,12 +11,12 @@ import android.os.Bundle
 import android.os.IBinder
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.widget.Toast
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import com.learning.newuserkk.xkcdbrowser.picture.service.*
 import kotlinx.android.synthetic.main.images_list.*
+import kotlinx.android.synthetic.main.images_list_item.*
 import kotlinx.android.synthetic.main.list_activity.*
 
 
@@ -29,6 +29,7 @@ class ImagesListActivity : AppCompatActivity() {
         }
 
         override fun onException(error: Throwable) {
+            Log.e(LOG_TAG, error.message)
             showComicsFetchErrorDialog()
         }
     }
@@ -40,6 +41,7 @@ class ImagesListActivity : AppCompatActivity() {
         }
 
         override fun onException(error: Throwable) {
+            Log.e(LOG_TAG, error.message)
             Toast.makeText(this@ImagesListActivity,
                     getString(R.string.loadComicJsonErrorMessage),
                     Toast.LENGTH_SHORT)
