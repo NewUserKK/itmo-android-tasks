@@ -8,8 +8,8 @@
     <string name="comicId" translatable="false">#%1$d</string>
     <string name="headComicFetchErrorMessage">Couldn\'t fetch head comic.
         Check your Internet connection and try again</string>
-    <string name="reloadMessage">Reload</string>
-    <string name="exitMessage">Exit</string>
+    <string name="reload">Reload</string>
+    <string name="exit">Exit</string>
     <string name="loadPictureErrorMessage">Couldn\'t fetch picture! Check your internet connection and try again</string>
     <string name="okMessage">OK</string>
     <string name="loadComicJsonErrorMessage">Couldn\'t load some comics</string>
@@ -20,4 +20,9 @@
     <string name="debug_oldestLoadedComicReachedOnSwipe">Older comics not loaded, load them from comics list first</string>
     <string name="unknownPictureErrorMessage">Unknown error while loading picture</string>
     <string name="addToFavorite">Add to favorite</string>
+    <string name="favorites">Favorites</string>
+    <string name="title_activity_test">Test</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

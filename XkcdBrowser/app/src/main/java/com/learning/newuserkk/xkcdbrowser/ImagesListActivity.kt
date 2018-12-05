@@ -12,11 +12,12 @@ import android.os.IBinder
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import com.learning.newuserkk.xkcdbrowser.picture.service.*
 import kotlinx.android.synthetic.main.images_list.*
-import kotlinx.android.synthetic.main.images_list_item.*
 import kotlinx.android.synthetic.main.list_activity.*
 
 
@@ -170,11 +171,11 @@ class ImagesListActivity : AppCompatActivity() {
     fun showComicsFetchErrorDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(getString(R.string.headComicFetchErrorMessage))
-                .setPositiveButton(getString(R.string.reloadMessage)) { dialog, _ ->
+                .setPositiveButton(getString(R.string.reload)) { dialog, _ ->
                     dialog.dismiss()
                     fetchStartComics()
                 }
-                .setNegativeButton(getString(R.string.exitMessage)) { dialog, _ ->
+                .setNegativeButton(getString(R.string.exit)) { dialog, _ ->
                     dialog.dismiss()
                     this.finish()
                 }
@@ -183,6 +184,24 @@ class ImagesListActivity : AppCompatActivity() {
 
     fun notifyAdapter() {
         adapter.notifyDataSetChanged()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.menuFavorites -> {
+                true
+            }
+            R.id.menuExit -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onDestroy() {
