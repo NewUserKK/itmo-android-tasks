@@ -2,7 +2,7 @@ package com.learning.newuserkk.xkcdbrowser
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.images_list_item.view.*
 class PictureRecyclerViewAdapter(private val parentActivity: ImagesListActivity,
                                  private val values: MutableList<XkcdComic>,
                                  private val twoPane: Boolean) :
-        RecyclerView.Adapter<PictureRecyclerViewAdapter.ViewHolder>() {
+        androidx.recyclerview.widget.RecyclerView.Adapter<PictureRecyclerViewAdapter.ViewHolder>() {
 
 
     companion object {
@@ -22,7 +22,7 @@ class PictureRecyclerViewAdapter(private val parentActivity: ImagesListActivity,
     }
 
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         val idView: TextView = view.listItemId
         val contentView: TextView = view.listItemTitle
     }

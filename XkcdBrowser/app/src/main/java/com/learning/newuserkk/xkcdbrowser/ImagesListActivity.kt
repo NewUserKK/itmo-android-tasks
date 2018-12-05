@@ -9,9 +9,9 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.widget.Toast
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
@@ -126,7 +126,7 @@ class ImagesListActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupRecyclerView(recyclerView: RecyclerView) {
+    private fun setupRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
         adapter = PictureRecyclerViewAdapter(
                 this, Content.ITEMS, twoPane)
         recyclerView.adapter = adapter

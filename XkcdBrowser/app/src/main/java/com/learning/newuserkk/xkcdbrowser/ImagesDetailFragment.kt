@@ -1,8 +1,8 @@
 package com.learning.newuserkk.xkcdbrowser
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,8 +21,9 @@ import java.io.IOException
  * in two-pane mode (on tablets) or a [ImagesDetailActivity]
  * on handsets.
  */
-class ImagesDetailFragment : Fragment() {
+class ImagesDetailFragment : androidx.fragment.app.Fragment() {
 
+    // TODO: wrap into service
     inner class BitmapLoadCallback(private val rootView: View): Callback {
         override fun onSuccess() {
             val comic = comic
