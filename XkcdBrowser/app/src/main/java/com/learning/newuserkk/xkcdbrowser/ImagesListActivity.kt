@@ -17,16 +17,13 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import com.learning.newuserkk.xkcdbrowser.picture.favorites.FavoritesActivity
-import com.learning.newuserkk.xkcdbrowser.picture.favorites.RestoreFavoritesAsyncTask
 import com.learning.newuserkk.xkcdbrowser.picture.service.*
 import kotlinx.android.synthetic.main.images_list.*
 import kotlinx.android.synthetic.main.list_activity.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 
-class ImagesListActivity : AppCompatActivity() {
+class ImagesListActivity : AppCompatActivity(), CoroutineScope {
 
     inner class LoadHeadComicCallback: LoadCallback<XkcdComic> {
         override fun onLoad(item: XkcdComic) {
@@ -62,6 +59,9 @@ class ImagesListActivity : AppCompatActivity() {
         const val START_COUNT = 30
         const val COMICS_TO_ADD = 20
     }
+
+    private val job = Job()
+    override val coroutineContext = Dispatchers.Main + job
 
     private var twoPane = false
 

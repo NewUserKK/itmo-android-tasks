@@ -10,7 +10,7 @@ import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 interface FavoritesDao {
 
     @Query("SELECT * FROM favorites ORDER BY id DESC")
-    fun getAll(): List<XkcdComic>
+    suspend fun getAll(): List<XkcdComic>
 
     @Insert
     fun insert(comic: XkcdComic, vararg comics: XkcdComic)

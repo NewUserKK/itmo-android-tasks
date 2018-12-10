@@ -11,22 +11,18 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
-import com.learning.newuserkk.xkcdbrowser.picture.favorites.RestoreFavoritesAsyncTask
 import com.learning.newuserkk.xkcdbrowser.picture.favorites.UpdateFavoritesAsyncTask
 import kotlinx.android.synthetic.main.images_list_item.view.*
+import kotlinx.coroutines.*
 import org.jetbrains.anko.imageResource
 
 
 open class PictureRecyclerViewAdapter(private val parentActivity: AppCompatActivity,
                                       private val values: MutableList<XkcdComic>,
                                       private val twoPane: Boolean) :
-        androidx.recyclerview.widget.RecyclerView.Adapter<PictureRecyclerViewAdapter.ViewHolder>() {
-
-
-    companion object {
-        const val LOG_TAG = "PictureRecyclerAdapter"
-    }
+        RecyclerView.Adapter<PictureRecyclerViewAdapter.ViewHolder>(), CoroutineScope {
 
 
     inner class ViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
@@ -36,6 +32,13 @@ open class PictureRecyclerViewAdapter(private val parentActivity: AppCompatActiv
     }
 
 
+    companion object {
+        const val LOG_TAG = "PictureRecyclerAdapter"
+    }
+
+
+    private val job = Job()
+    override val coroutineContext = Dispatchers.Main + job
     private val onClickListener: View.OnClickListener
 
     init {
@@ -73,7 +76,16 @@ open class PictureRecyclerViewAdapter(private val parentActivity: AppCompatActiv
             idView.text = idView.context.resources.getString(R.string.comicId, item.id)
             contentView.text = item.title
 
-            RestoreFavoritesAsyncTask(favoriteButtonView).execute(item)
+            launch {
+                val favoritesDao = XkcdBrowser.database.favoritesDao()
+                item.favorite = (item in favoritesDao.getAll())
+                favoriteButtonView.apply {
+                    imageResource = when (item.favorite) {
+                        true -> android.R.drawable.btn_star_big_on
+                        false -> android.R.drawable.btn_star_big_off
+                    }
+                }
+            }
             favoriteButtonView.setOnClickListener {
                 Log.d(LOG_TAG, "At favorite listener")
                 UpdateFavoritesAsyncTask(it as ImageButton).execute(item)
