@@ -13,8 +13,8 @@ interface FavoritesDao {
     suspend fun getAll(): List<XkcdComic>
 
     @Insert
-    fun insert(comic: XkcdComic, vararg comics: XkcdComic)
+    suspend fun insert(comic: XkcdComic, vararg comics: XkcdComic)
 
     @Delete
-    fun delete(comic: XkcdComic, vararg comics: XkcdComic)
+    suspend fun delete(comic: XkcdComic, vararg comics: XkcdComic)
 }
