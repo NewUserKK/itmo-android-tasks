@@ -2,12 +2,14 @@ package com.learning.newuserkk.xkcdbrowser.picture.favorites
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
-import android.widget.Toast
 import com.learning.newuserkk.xkcdbrowser.*
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import kotlinx.android.synthetic.main.images_list.*
 import kotlinx.coroutines.*
+
+const val WAS_ROTATED = "com.learning.newuserkk.xkcdbrowser.picture.favorites.WAS_ROTATED"
 
 class FavoritesActivity : AppCompatActivity(), CoroutineScope {
 
@@ -22,23 +24,33 @@ class FavoritesActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.list_activity)
+        setContentView(R.layout.activity_favorites)
 
-//        title = getString(R.string.favorites)
         if (detailsContainer != null) {
             twoPane = true
         }
 
         setupRecyclerView(images_list)
 
-        Log.d(LOG_TAG, "Fetching favorites from db...")
-        launch {
-            Content.FAVORITES.clear()
-            Content.FAVORITES.addAll(fetchAllFavorites())
-            Content.ITEM_MAP.putAll(Content.FAVORITES.map { Pair(it.id, it)} )
-            adapter.notifyDataSetChanged()
+        if (savedInstanceState == null ||
+                !savedInstanceState.getBoolean(WAS_ROTATED) ||
+                Content.FAVORITES.size == 0) {
+            launch {
+                Log.d(LOG_TAG, "Fetching favorites from db...")
+                Content.FAVORITES.clear()
+                Content.FAVORITES.addAll(XkcdBrowser.database.favoritesDao().getAll())
+                Content.ITEM_MAP.putAll(Content.FAVORITES.map { Pair(it.id, it) })
+                adapter.notifyDataSetChanged()
+                Log.d(LOG_TAG, "OK")
+            }
+        } else {
+            Log.d(LOG_TAG, "Found ${Content.FAVORITES.size} loaded favorites")
         }
-        Log.d(LOG_TAG, "OK")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(WAS_ROTATED, true)
+        super.onSaveInstanceState(outState)
     }
 
     private fun setupRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
@@ -47,7 +59,8 @@ class FavoritesActivity : AppCompatActivity(), CoroutineScope {
         recyclerView.adapter = adapter
     }
 
-    private suspend fun fetchAllFavorites(): List<XkcdComic> {
-        return XkcdBrowser.database.favoritesDao().getAll()
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 }

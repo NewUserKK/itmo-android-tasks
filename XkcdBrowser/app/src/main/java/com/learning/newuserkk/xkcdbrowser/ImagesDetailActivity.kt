@@ -34,13 +34,4 @@ class ImagesDetailActivity : AppCompatActivity() {
                     .commit()
         }
     }
-
-    override fun onOptionsItemSelected(item: MenuItem) =
-            when (item.itemId) {
-                android.R.id.home -> {
-                    navigateUpTo(Intent(this, ImagesListActivity::class.java))
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
-            }
 }

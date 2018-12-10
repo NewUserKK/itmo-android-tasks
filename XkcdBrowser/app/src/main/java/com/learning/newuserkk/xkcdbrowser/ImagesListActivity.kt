@@ -14,12 +14,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import com.learning.newuserkk.xkcdbrowser.picture.favorites.FavoritesActivity
 import com.learning.newuserkk.xkcdbrowser.picture.service.*
 import kotlinx.android.synthetic.main.images_list.*
-import kotlinx.android.synthetic.main.list_activity.*
+import kotlinx.android.synthetic.main.activity_list.*
 import kotlinx.coroutines.*
 
 
@@ -87,7 +86,7 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.list_activity)
+        setContentView(R.layout.activity_list)
 
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(INTERNET) != PackageManager.PERMISSION_GRANTED) {

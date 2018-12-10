@@ -72,7 +72,7 @@ class ImagesDetailFragment : androidx.fragment.app.Fragment() {
 
     private var comic: XkcdComic? = null
     private var comicId = -1
-    private var wasLoaded = false
+    private var wasLoadedThere = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
