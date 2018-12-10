@@ -9,7 +9,7 @@ import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 @Dao
 interface FavoritesDao {
 
-    @Query("SELECT * FROM favorites")
+    @Query("SELECT * FROM favorites ORDER BY id DESC")
     fun getAll(): List<XkcdComic>
 
     @Insert

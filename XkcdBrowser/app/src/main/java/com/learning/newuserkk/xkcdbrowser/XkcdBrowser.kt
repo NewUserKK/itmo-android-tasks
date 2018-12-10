@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.learning.newuserkk.xkcdbrowser.picture.favorites.AppDatabase
+import com.squareup.picasso.Picasso
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 
@@ -14,6 +15,7 @@ class XkcdBrowser: Application() {
         const val LOG_TAG = "Application"
         lateinit var retrofit: Retrofit
         lateinit var database: AppDatabase
+        lateinit var picasso: Picasso
     }
 
 
@@ -28,6 +30,8 @@ class XkcdBrowser: Application() {
         database = Room
                 .databaseBuilder(applicationContext, AppDatabase::class.java, "AppDatabase")
                 .build()
+        picasso = Picasso.get()
+        picasso.isLoggingEnabled = true
     }
 
 }

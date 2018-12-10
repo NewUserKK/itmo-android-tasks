@@ -12,6 +12,7 @@ object Content {
     private const val LOG_TAG = "Content"
 
     val ITEMS: MutableList<XkcdComic> = ArrayList()
+    val FAVORITES: MutableList<XkcdComic> = ArrayList()
     val ITEM_MAP: MutableMap<Int, XkcdComic> = TreeMap(
             kotlin.Comparator {
                 o1, o2 -> -o1.compareTo(o2)

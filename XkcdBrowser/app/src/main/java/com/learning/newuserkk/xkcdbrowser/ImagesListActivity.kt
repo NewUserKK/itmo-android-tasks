@@ -16,9 +16,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
+import com.learning.newuserkk.xkcdbrowser.picture.favorites.FavoritesActivity
+import com.learning.newuserkk.xkcdbrowser.picture.favorites.RestoreFavoritesAsyncTask
 import com.learning.newuserkk.xkcdbrowser.picture.service.*
 import kotlinx.android.synthetic.main.images_list.*
 import kotlinx.android.synthetic.main.list_activity.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class ImagesListActivity : AppCompatActivity() {
@@ -43,10 +48,10 @@ class ImagesListActivity : AppCompatActivity() {
 
         override fun onException(error: Throwable) {
             Log.e(LOG_TAG, error.message)
-            Toast.makeText(this@ImagesListActivity,
-                    getString(R.string.loadComicJsonErrorMessage),
-                    Toast.LENGTH_SHORT)
-                    .show()
+//            Toast.makeText(this@ImagesListActivity,
+//                    getString(R.string.loadComicJsonErrorMessage),
+//                    Toast.LENGTH_SHORT)
+//                    .show()
         }
     }
 
@@ -106,12 +111,16 @@ class ImagesListActivity : AppCompatActivity() {
         )
 
         Log.d(LOG_TAG, "Found $loadedComicsCount already loaded comics")
-        if (loadedComicsCount == 0) {
-            fetchStartComics()
+        runBlocking {
+            if (loadedComicsCount == 0) {
+//            RestoreFavoritesAsyncTask(favoriteButtonView).execute(item)
+                fetchStartComics()
 
-        } else {
-            notifyAdapter()
+            } else {
+                notifyAdapter()
+            }
         }
+
 
         addComicsButton.text = getString(R.string.getMoreComics, COMICS_TO_ADD)
         addComicsButton.setOnClickListener {
@@ -194,6 +203,8 @@ class ImagesListActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.menuFavorites -> {
+                val intent = Intent(this, FavoritesActivity::class.java)
+                startActivity(intent)
                 true
             }
             R.id.menuExit -> {

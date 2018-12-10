@@ -33,6 +33,8 @@
         </activity>
 
         <service android:name=".picture.service.FetchComicService" />
+
+        <activity android:name=".picture.favorites.FavoritesActivity"></activity>
     </application>
 
 </manifest>
