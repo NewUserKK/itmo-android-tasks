@@ -65,11 +65,11 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
     private var twoPane = false
 
     private var service: FetchComicService? = null
-    private var binder: FetchComicService.FetchComicServiceBinder? = null
+    private var binder: FetchComicService.ServiceBinder? = null
 
     private val serviceConnection = object: ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            binder = service as FetchComicService.FetchComicServiceBinder
+            binder = service as FetchComicService.ServiceBinder
             this@ImagesListActivity.service = binder?.service
             binder?.setHeadCallback(LoadHeadComicCallback())
             binder?.setRegularCallback(LoadRegularComicCallback())
@@ -110,16 +110,12 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
         )
 
         Log.d(LOG_TAG, "Found $loadedComicsCount already loaded comics")
-        runBlocking {
-            if (loadedComicsCount == 0) {
-//            RestoreFavoritesAsyncTask(favoriteButtonView).execute(item)
-                fetchStartComics()
+        if (loadedComicsCount == 0) {
+            fetchStartComics()
 
-            } else {
-                notifyAdapter()
-            }
+        } else {
+            notifyAdapter()
         }
-
 
         addComicsButton.text = getString(R.string.getMoreComics, COMICS_TO_ADD)
         addComicsButton.setOnClickListener {

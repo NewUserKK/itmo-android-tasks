@@ -26,7 +26,7 @@ const val COMICS_AMOUNT_TO_LOAD_EXTRA = "com.learning.newuserkk.xkcdbrowser.pict
 
 class FetchComicService : Service() {
 
-    class FetchComicServiceBinder(val service: FetchComicService) : Binder() {
+    class ServiceBinder(val service: FetchComicService) : Binder() {
         fun setHeadCallback(callback: LoadCallback<XkcdComic>) {
             Log.d(LOG_TAG, "Set head comic callback")
             service.headCallback = callback
@@ -159,7 +159,7 @@ class FetchComicService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         Log.d(LOG_TAG, "Binded service")
-        return FetchComicServiceBinder(this)
+        return ServiceBinder(this)
     }
 
     override fun onUnbind(intent: Intent?): Boolean {

@@ -18,6 +18,7 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.comic_details.view.*
 import java.io.IOException
+import java.lang.ref.WeakReference
 
 
 /**
@@ -29,24 +30,27 @@ import java.io.IOException
 class ImagesDetailFragment : androidx.fragment.app.Fragment() {
 
     // TODO: wrap into service
-    inner class BitmapLoadCallback(private val rootView: View): Callback {
+    inner class BitmapLoadCallback(rootView: View): Callback {
+        val viewRef = WeakReference(rootView)
+
         override fun onSuccess() {
             val comic = comic
             if (comic == null) {
                 Log.e(LOG_TAG, "Comic is null!")
                 return
             }
-
-            Log.d(ImagesListActivity.LOG_TAG, "Loaded picture of #${comic.id}")
-            rootView.detailsComicPicture.contentDescription =
-                    resources.getString(R.string.detailsComicDescription, comic.alt)
-            rootView.detailsComicDescription.text =
-                    resources.getString(R.string.detailsComicDescription, comic.alt)
-            rootView.detailsComicDate.text = resources.getString(
-                    R.string.detailsComicDate,
-                    comic.day,
-                    comic.month,
-                    comic.year)
+            viewRef.get()?.apply {
+                Log.d(ImagesListActivity.LOG_TAG, "Loaded picture of #${comic.id}")
+                detailsComicPicture.contentDescription =
+                        resources.getString(R.string.detailsComicDescription, comic.alt)
+                detailsComicDescription.text =
+                        resources.getString(R.string.detailsComicDescription, comic.alt)
+                detailsComicDate.text = resources.getString(
+                        R.string.detailsComicDate,
+                        comic.day,
+                        comic.month,
+                        comic.year)
+            }
         }
 
         override fun onError(e: java.lang.Exception?) {
