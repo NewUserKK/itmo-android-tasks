@@ -8,12 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.learning.newuserkk.xkcdbrowser.XkcdBrowser.Companion.database
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
-import com.learning.newuserkk.xkcdbrowser.picture.favorites.FavoritesDao
 import kotlinx.android.synthetic.main.images_list_item.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -78,9 +76,7 @@ open class PictureRecyclerViewAdapter(private val parentActivity: AppCompatActiv
         holder.apply {
             idView.text = idView.context.resources.getString(R.string.comicId, item.id)
             contentView.text = item.title
-            launch {
-                restoreFavoriteState(item)
-            }
+            restoreFavoriteState(item)
 
             favoriteButtonView.setOnClickListener {
                 Log.d(LOG_TAG, "At favorite listener")
@@ -88,9 +84,11 @@ open class PictureRecyclerViewAdapter(private val parentActivity: AppCompatActiv
                     if (!item.favorite) {
                         Log.d(LOG_TAG, "Adding comic #${item.id} to favorites...")
                         database.favoritesDao().insert(item)
+                        Content.FAVORITES.add(item)
                     } else {
                         Log.d(LOG_TAG, "Deleting comic #${item.id} to favorites...")
                         database.favoritesDao().delete(item)
+                        Content.FAVORITES.remove(item)
                     }
                     item.favorite = !item.favorite
                     (it as ImageButton).imageResource = when (item.favorite) {
@@ -105,8 +103,8 @@ open class PictureRecyclerViewAdapter(private val parentActivity: AppCompatActiv
         }
     }
 
-    private suspend fun ViewHolder.restoreFavoriteState(item: XkcdComic) {
-        item.favorite = (item in database.favoritesDao().getAll())
+    private fun ViewHolder.restoreFavoriteState(item: XkcdComic) {
+        item.favorite = (item in Content.FAVORITES)
         favoriteButtonView.apply {
             imageResource = when (item.favorite) {
                 true -> android.R.drawable.btn_star_big_on

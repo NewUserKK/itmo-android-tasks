@@ -9,17 +9,20 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import com.learning.newuserkk.xkcdbrowser.picture.favorites.FavoritesActivity
 import com.learning.newuserkk.xkcdbrowser.picture.service.*
-import kotlinx.android.synthetic.main.images_list.*
 import kotlinx.android.synthetic.main.activity_list.*
-import kotlinx.coroutines.*
+import kotlinx.android.synthetic.main.images_list.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 
 class ImagesListActivity : AppCompatActivity(), CoroutineScope {
@@ -99,7 +102,9 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
             twoPane = true
         }
 
-        setupRecyclerView(images_list)
+        launch {
+            setupRecyclerView(images_list)
+        }
 
         loadedComicsCount = Content.ITEMS.size
 
@@ -110,6 +115,7 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
         )
 
         Log.d(LOG_TAG, "Found $loadedComicsCount already loaded comics")
+
         if (loadedComicsCount == 0) {
             fetchStartComics()
 
@@ -133,10 +139,19 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private fun setupRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
-        adapter = PictureRecyclerViewAdapter(
-                this, Content.ITEMS, twoPane)
+    private suspend fun setupRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
+        if (Content.FAVORITES.size == 0) {
+            loadFavorites()
+        }
+        adapter = PictureRecyclerViewAdapter(this, Content.ITEMS, twoPane)
         recyclerView.adapter = adapter
+    }
+
+    private suspend fun loadFavorites() {
+        Log.d(LOG_TAG, "Fetching favorites from db...")
+        Content.FAVORITES.clear()
+        Content.FAVORITES.addAll(XkcdBrowser.database.favoritesDao().getAll())
+        Log.d(LOG_TAG, "OK")
     }
 
     private fun fetchStartComics() {

@@ -1,13 +1,11 @@
 package com.learning.newuserkk.xkcdbrowser.picture
 
-import android.os.Parcelable
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.learning.newuserkk.xkcdbrowser.Content
-import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "favorites")
 data class XkcdComic

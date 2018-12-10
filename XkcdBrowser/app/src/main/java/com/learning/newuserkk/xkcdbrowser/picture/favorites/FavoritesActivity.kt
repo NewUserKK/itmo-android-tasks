@@ -1,15 +1,16 @@
 package com.learning.newuserkk.xkcdbrowser.picture.favorites
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
-import com.learning.newuserkk.xkcdbrowser.*
-import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
+import com.learning.newuserkk.xkcdbrowser.Content
+import com.learning.newuserkk.xkcdbrowser.PictureRecyclerViewAdapter
+import com.learning.newuserkk.xkcdbrowser.R
 import kotlinx.android.synthetic.main.images_list.*
-import kotlinx.coroutines.*
-
-const val WAS_ROTATED = "com.learning.newuserkk.xkcdbrowser.picture.favorites.WAS_ROTATED"
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 
 class FavoritesActivity : AppCompatActivity(), CoroutineScope {
 
@@ -19,7 +20,7 @@ class FavoritesActivity : AppCompatActivity(), CoroutineScope {
 
     private val job = Job()
     override val coroutineContext = Dispatchers.Main + job
-    private lateinit var adapter: FavoritesRecyclerViewAdapter
+    private lateinit var adapter: PictureRecyclerViewAdapter
     private var twoPane = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,30 +32,12 @@ class FavoritesActivity : AppCompatActivity(), CoroutineScope {
         }
 
         setupRecyclerView(images_list)
-
-        if (savedInstanceState == null ||
-                !savedInstanceState.getBoolean(WAS_ROTATED) ||
-                Content.FAVORITES.size == 0) {
-            launch {
-                Log.d(LOG_TAG, "Fetching favorites from db...")
-                Content.FAVORITES.clear()
-                Content.FAVORITES.addAll(XkcdBrowser.database.favoritesDao().getAll())
-                Content.ITEM_MAP.putAll(Content.FAVORITES.map { Pair(it.id, it) })
-                adapter.notifyDataSetChanged()
-                Log.d(LOG_TAG, "OK")
-            }
-        } else {
-            Log.d(LOG_TAG, "Found ${Content.FAVORITES.size} loaded favorites")
-        }
+        Content.ITEM_MAP.putAll(Content.FAVORITES.map { Pair(it.id, it) })
+        Log.d(LOG_TAG, "Found ${Content.FAVORITES.size} loaded favorites")
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBoolean(WAS_ROTATED, true)
-        super.onSaveInstanceState(outState)
-    }
-
-    private fun setupRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
-        adapter = FavoritesRecyclerViewAdapter(
+    private fun setupRecyclerView(recyclerView: RecyclerView) {
+        adapter = PictureRecyclerViewAdapter(
                 this@FavoritesActivity, Content.FAVORITES, twoPane)
         recyclerView.adapter = adapter
     }

@@ -1,9 +1,7 @@
 package com.learning.newuserkk.xkcdbrowser
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import android.view.MenuItem
 
 /**
  * An activity representing a single Images detail screen. This
