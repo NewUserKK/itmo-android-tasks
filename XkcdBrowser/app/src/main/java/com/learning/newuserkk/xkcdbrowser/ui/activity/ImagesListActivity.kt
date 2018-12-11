@@ -14,7 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.learning.newuserkk.xkcdbrowser.adapter.PictureRecyclerViewAdapter
+import com.learning.newuserkk.xkcdbrowser.ui.adapter.PictureRecyclerViewAdapter
 import com.learning.newuserkk.xkcdbrowser.R
 import com.learning.newuserkk.xkcdbrowser.data.Content
 import com.learning.newuserkk.xkcdbrowser.XkcdBrowser

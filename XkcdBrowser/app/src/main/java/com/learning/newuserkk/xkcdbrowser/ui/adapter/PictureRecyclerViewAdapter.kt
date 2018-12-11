@@ -1,4 +1,4 @@
-package com.learning.newuserkk.xkcdbrowser.adapter
+package com.learning.newuserkk.xkcdbrowser.ui.adapter
 
 import android.content.Intent
 import android.os.Bundle

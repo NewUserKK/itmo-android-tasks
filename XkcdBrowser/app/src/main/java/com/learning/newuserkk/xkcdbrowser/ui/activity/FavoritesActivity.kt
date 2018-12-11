@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.learning.newuserkk.xkcdbrowser.data.Content
-import com.learning.newuserkk.xkcdbrowser.adapter.PictureRecyclerViewAdapter
+import com.learning.newuserkk.xkcdbrowser.ui.adapter.PictureRecyclerViewAdapter
 import com.learning.newuserkk.xkcdbrowser.R
 import kotlinx.android.synthetic.main.list_comics.*
 import kotlinx.coroutines.CoroutineScope
