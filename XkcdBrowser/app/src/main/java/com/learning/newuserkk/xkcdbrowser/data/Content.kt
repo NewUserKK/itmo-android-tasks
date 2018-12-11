@@ -1,6 +1,5 @@
-package com.learning.newuserkk.xkcdbrowser
+package com.learning.newuserkk.xkcdbrowser.data
 
-import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import java.net.URL
 import java.util.*
 

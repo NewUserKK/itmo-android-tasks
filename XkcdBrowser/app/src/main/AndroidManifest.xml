@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
-            android:name=".ImagesListActivity"
+            android:name="com.learning.newuserkk.xkcdbrowser.ui.activity.ImagesListActivity"
             android:label="@string/title_images_list"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -25,25 +25,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ImagesDetailActivity"
+            android:name="com.learning.newuserkk.xkcdbrowser.ui.activity.ImagesDetailActivity"
             android:label="@string/title_images_detail"
-            android:parentActivityName=".ImagesListActivity"
+            android:parentActivityName="com.learning.newuserkk.xkcdbrowser.ui.activity.ImagesListActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.learning.newuserkk.xkcdbrowser.ImagesListActivity" />
+                android:value="com.learning.newuserkk.xkcdbrowser.ui.activity.ImagesListActivity" />
         </activity>
 
-        <service android:name=".picture.service.FetchComicService" />
+        <service android:name=".service.FetchComicService" />
 
         <activity
-            android:name=".picture.favorites.FavoritesActivity"
+            android:name="com.learning.newuserkk.xkcdbrowser.ui.activity.FavoritesActivity"
             android:label="@string/favorites"
-            android:parentActivityName=".ImagesListActivity"
+            android:parentActivityName="com.learning.newuserkk.xkcdbrowser.ui.activity.ImagesListActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.learning.newuserkk.xkcdbrowser.ImagesListActivity" />
+                android:value="com.learning.newuserkk.xkcdbrowser.ui.activity.ImagesListActivity" />
         </activity>
     </application>
 

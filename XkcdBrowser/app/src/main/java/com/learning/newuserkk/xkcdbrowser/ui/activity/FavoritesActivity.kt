@@ -1,13 +1,13 @@
-package com.learning.newuserkk.xkcdbrowser.picture.favorites
+package com.learning.newuserkk.xkcdbrowser.ui.activity
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.learning.newuserkk.xkcdbrowser.Content
-import com.learning.newuserkk.xkcdbrowser.PictureRecyclerViewAdapter
+import com.learning.newuserkk.xkcdbrowser.data.Content
+import com.learning.newuserkk.xkcdbrowser.adapter.PictureRecyclerViewAdapter
 import com.learning.newuserkk.xkcdbrowser.R
-import kotlinx.android.synthetic.main.images_list.*
+import kotlinx.android.synthetic.main.list_comics.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

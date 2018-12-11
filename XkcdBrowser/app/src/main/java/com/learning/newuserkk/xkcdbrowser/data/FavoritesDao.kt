@@ -1,10 +1,9 @@
-package com.learning.newuserkk.xkcdbrowser.picture.favorites
+package com.learning.newuserkk.xkcdbrowser.data
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 
 @Dao
 interface FavoritesDao {

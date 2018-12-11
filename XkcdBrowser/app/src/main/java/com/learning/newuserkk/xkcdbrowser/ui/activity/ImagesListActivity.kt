@@ -1,4 +1,4 @@
-package com.learning.newuserkk.xkcdbrowser
+package com.learning.newuserkk.xkcdbrowser.ui.activity
 
 import android.Manifest.permission.INTERNET
 import android.content.ComponentName
@@ -14,11 +14,15 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
-import com.learning.newuserkk.xkcdbrowser.picture.favorites.FavoritesActivity
-import com.learning.newuserkk.xkcdbrowser.picture.service.*
+import com.learning.newuserkk.xkcdbrowser.adapter.PictureRecyclerViewAdapter
+import com.learning.newuserkk.xkcdbrowser.R
+import com.learning.newuserkk.xkcdbrowser.data.Content
+import com.learning.newuserkk.xkcdbrowser.XkcdBrowser
+import com.learning.newuserkk.xkcdbrowser.data.XkcdComic
+import com.learning.newuserkk.xkcdbrowser.service.*
+import com.learning.newuserkk.xkcdbrowser.service.common.LoadCallback
 import kotlinx.android.synthetic.main.activity_list.*
-import kotlinx.android.synthetic.main.images_list.*
+import kotlinx.android.synthetic.main.list_comics.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -182,7 +186,7 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun addComic(comic: XkcdComic) {
-        Log.d(ImagesListActivity.LOG_TAG, "Got #${comic.id}")
+        Log.d(LOG_TAG, "Got #${comic.id}")
         Content.addItem(comic)
         notifyAdapter()
     }
@@ -206,7 +210,7 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        menuInflater.inflate(R.menu.menu_toolbar_list_activity, menu)
         return true
     }
 

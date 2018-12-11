@@ -1,4 +1,4 @@
-package com.learning.newuserkk.xkcdbrowser
+package com.learning.newuserkk.xkcdbrowser.adapter
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,9 +10,13 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.learning.newuserkk.xkcdbrowser.R
+import com.learning.newuserkk.xkcdbrowser.ui.activity.ImagesDetailActivity
+import com.learning.newuserkk.xkcdbrowser.data.Content
 import com.learning.newuserkk.xkcdbrowser.XkcdBrowser.Companion.database
-import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
-import kotlinx.android.synthetic.main.images_list_item.view.*
+import com.learning.newuserkk.xkcdbrowser.data.XkcdComic
+import com.learning.newuserkk.xkcdbrowser.ui.fragment.ImagesDetailFragment
+import kotlinx.android.synthetic.main.item_list_comics.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -67,7 +71,7 @@ open class PictureRecyclerViewAdapter(private val parentActivity: AppCompatActiv
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.images_list_item, parent, false)
+                .inflate(R.layout.item_list_comics, parent, false)
         return ViewHolder(view)
     }
 

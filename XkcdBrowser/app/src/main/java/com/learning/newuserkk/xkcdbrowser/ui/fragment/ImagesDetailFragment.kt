@@ -1,4 +1,4 @@
-package com.learning.newuserkk.xkcdbrowser
+package com.learning.newuserkk.xkcdbrowser.ui.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -7,9 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
+import com.learning.newuserkk.xkcdbrowser.ui.listeners.OnSwipeTouchListener
+import com.learning.newuserkk.xkcdbrowser.R
+import com.learning.newuserkk.xkcdbrowser.ui.activity.ImagesListActivity
+import com.learning.newuserkk.xkcdbrowser.data.Content
+import com.learning.newuserkk.xkcdbrowser.XkcdBrowser
+import com.learning.newuserkk.xkcdbrowser.data.XkcdComic
 import com.squareup.picasso.Callback
-import kotlinx.android.synthetic.main.comic_details.view.*
+import kotlinx.android.synthetic.main.fragment_comic_details.view.*
 import java.io.IOException
 import java.lang.ref.WeakReference
 
@@ -69,7 +74,6 @@ class ImagesDetailFragment : androidx.fragment.app.Fragment() {
 
     private var comic: XkcdComic? = null
     private var comicId = -1
-    private var wasLoadedThere = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +90,7 @@ class ImagesDetailFragment : androidx.fragment.app.Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.comic_details, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_comic_details, container, false)
 
         with (rootView) {
             if (comic == null) {
@@ -135,7 +139,7 @@ class ImagesDetailFragment : androidx.fragment.app.Fragment() {
     private fun replaceFragment(comicId: Int) {
         val fragment = ImagesDetailFragment().apply {
             arguments = Bundle().apply {
-                putInt(ImagesDetailFragment.ARG_ITEM_ID, comicId)
+                putInt(ARG_ITEM_ID, comicId)
             }
         }
         fragmentManager?.beginTransaction()

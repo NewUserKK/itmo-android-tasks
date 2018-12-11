@@ -12,7 +12,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <include layout="@layout/images_list" />
+        <include layout="@layout/list_comics" />
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

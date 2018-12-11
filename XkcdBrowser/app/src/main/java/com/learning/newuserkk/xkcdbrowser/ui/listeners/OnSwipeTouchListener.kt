@@ -1,4 +1,4 @@
-package com.learning.newuserkk.xkcdbrowser
+package com.learning.newuserkk.xkcdbrowser.ui.listeners
 
 import android.content.Context
 import android.view.GestureDetector

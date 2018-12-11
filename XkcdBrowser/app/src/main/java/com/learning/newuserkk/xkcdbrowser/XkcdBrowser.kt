@@ -4,7 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.learning.newuserkk.xkcdbrowser.picture.favorites.AppDatabase
+import com.learning.newuserkk.xkcdbrowser.data.AppDatabase
+import com.learning.newuserkk.xkcdbrowser.data.Content
 import com.squareup.picasso.Picasso
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory

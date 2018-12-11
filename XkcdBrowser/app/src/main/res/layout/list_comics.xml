@@ -9,5 +9,5 @@
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    tools:context=".ImagesListActivity"
-    tools:listitem="@layout/images_list_item" />
+    tools:context=".ui.activity.ImagesListActivity"
+    tools:listitem="@layout/item_list_comics" />

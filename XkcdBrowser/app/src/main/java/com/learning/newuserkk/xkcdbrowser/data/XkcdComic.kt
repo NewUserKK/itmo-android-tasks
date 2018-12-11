@@ -1,11 +1,10 @@
-package com.learning.newuserkk.xkcdbrowser.picture
+package com.learning.newuserkk.xkcdbrowser.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.learning.newuserkk.xkcdbrowser.Content
 
 @Entity(tableName = "favorites")
 data class XkcdComic

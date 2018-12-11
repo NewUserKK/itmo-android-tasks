@@ -1,4 +1,4 @@
-package com.learning.newuserkk.xkcdbrowser.picture.service
+package com.learning.newuserkk.xkcdbrowser.service
 
 import android.annotation.SuppressLint
 import android.app.Service
@@ -9,8 +9,10 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import com.learning.newuserkk.xkcdbrowser.XkcdBrowser
-import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
-import com.learning.newuserkk.xkcdbrowser.picture.retrofit.XkcdApiService
+import com.learning.newuserkk.xkcdbrowser.data.XkcdComic
+import com.learning.newuserkk.xkcdbrowser.net.XkcdApiService
+import com.learning.newuserkk.xkcdbrowser.service.common.LoadCallback
+import com.learning.newuserkk.xkcdbrowser.service.common.ServiceResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

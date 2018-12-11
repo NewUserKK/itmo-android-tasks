@@ -1,4 +1,4 @@
-package com.learning.newuserkk.xkcdbrowser.picture.service
+package com.learning.newuserkk.xkcdbrowser.service.common
 
 interface LoadCallback<T> {
     fun onLoad(item: T)

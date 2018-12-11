@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toTopOf="@id/addComicsButton"
         app:layout_constraintTop_toTopOf="parent">
 
-        <include layout="@layout/images_list" />
+        <include layout="@layout/list_comics" />
     </FrameLayout>
 
     <Button

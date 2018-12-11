@@ -39,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
 
-        tools:context=".ImagesDetailFragment" />
+        tools:context=".ui.fragment.ImagesDetailFragment" />
 
     <TextView
         android:id="@+id/detailsComicDescription"

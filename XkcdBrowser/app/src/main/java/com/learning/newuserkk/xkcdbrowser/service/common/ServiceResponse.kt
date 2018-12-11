@@ -1,4 +1,4 @@
-package com.learning.newuserkk.xkcdbrowser.picture.service
+package com.learning.newuserkk.xkcdbrowser.service.common
 
 data class ServiceResponse<T>(val item: T?, val error: Throwable? = null) {
 

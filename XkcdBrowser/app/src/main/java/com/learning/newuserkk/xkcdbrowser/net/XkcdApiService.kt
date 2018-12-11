@@ -1,7 +1,7 @@
-package com.learning.newuserkk.xkcdbrowser.picture.retrofit
+package com.learning.newuserkk.xkcdbrowser.net
 
-import com.learning.newuserkk.xkcdbrowser.Content
-import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
+import com.learning.newuserkk.xkcdbrowser.data.Content
+import com.learning.newuserkk.xkcdbrowser.data.XkcdComic
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
