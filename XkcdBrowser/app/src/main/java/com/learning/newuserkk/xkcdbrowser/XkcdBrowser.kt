@@ -13,10 +13,9 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 class XkcdBrowser: Application() {
 
     companion object {
-        const val LOG_TAG = "Application"
+        const val LOG_TAG = "XkcdBrowser"
         lateinit var retrofit: Retrofit
         lateinit var database: AppDatabase
-        lateinit var picasso: Picasso
     }
 
 
@@ -31,8 +30,7 @@ class XkcdBrowser: Application() {
         database = Room
                 .databaseBuilder(applicationContext, AppDatabase::class.java, "AppDatabase")
                 .build()
-        picasso = Picasso.get()
-        picasso.isLoggingEnabled = true
+        Picasso.get().isLoggingEnabled = true
     }
 
 }

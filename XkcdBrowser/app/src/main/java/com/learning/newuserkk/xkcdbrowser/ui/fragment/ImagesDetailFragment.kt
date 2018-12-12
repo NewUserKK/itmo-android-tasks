@@ -14,6 +14,7 @@ import com.learning.newuserkk.xkcdbrowser.data.Content
 import com.learning.newuserkk.xkcdbrowser.XkcdBrowser
 import com.learning.newuserkk.xkcdbrowser.data.XkcdComic
 import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_comic_details.view.*
 import java.io.IOException
 import java.lang.ref.WeakReference
@@ -98,7 +99,7 @@ class ImagesDetailFragment : androidx.fragment.app.Fragment() {
             }
             comic?.let { comic ->
                 context?.let { context ->
-                    XkcdBrowser.picasso
+                    Picasso.get()
                             .load(comic.imgLink)
                             .tag(LOG_TAG)
                             .into(detailsComicPicture, BitmapLoadCallback(rootView))

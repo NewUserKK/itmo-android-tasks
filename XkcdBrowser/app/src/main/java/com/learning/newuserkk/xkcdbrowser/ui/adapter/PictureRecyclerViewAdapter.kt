@@ -27,7 +27,7 @@ import org.jetbrains.anko.imageResource
 open class PictureRecyclerViewAdapter(private val parentActivity: AppCompatActivity,
                                       private val values: MutableList<XkcdComic>,
                                       private val twoPane: Boolean) :
-        RecyclerView.Adapter<PictureRecyclerViewAdapter.ViewHolder>(), CoroutineScope {
+        RecyclerView.Adapter<PictureRecyclerViewAdapter.ViewHolder>() {
 
 
     inner class ViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
@@ -42,8 +42,6 @@ open class PictureRecyclerViewAdapter(private val parentActivity: AppCompatActiv
     }
 
 
-    private val job = Job()
-    override val coroutineContext = Dispatchers.Main + job
     private val onClickListener: View.OnClickListener
 
     init {
@@ -84,7 +82,7 @@ open class PictureRecyclerViewAdapter(private val parentActivity: AppCompatActiv
 
             favoriteButtonView.setOnClickListener {
                 Log.d(LOG_TAG, "At favorite listener")
-                launch {
+                (parentActivity as CoroutineScope).launch {
                     if (!item.favorite) {
                         Log.d(LOG_TAG, "Adding comic #${item.id} to favorites...")
                         database.favoritesDao().insert(item)

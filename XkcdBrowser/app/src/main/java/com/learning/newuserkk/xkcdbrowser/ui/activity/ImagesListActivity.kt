@@ -122,9 +122,6 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
 
         if (loadedComicsCount == 0) {
             fetchStartComics()
-
-        } else {
-            notifyAdapter()
         }
 
         addComicsButton.text = getString(R.string.getMoreComics, COMICS_TO_ADD)
@@ -206,7 +203,9 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
     }
 
     fun notifyAdapter() {
-        adapter.notifyDataSetChanged()
+        if (::adapter.isInitialized) {
+            adapter.notifyDataSetChanged()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
