@@ -86,11 +86,9 @@ open class PictureRecyclerViewAdapter(private val parentActivity: AppCompatActiv
                     if (!item.favorite) {
                         Log.d(LOG_TAG, "Adding comic #${item.id} to favorites...")
                         database.favoritesDao().insert(item)
-                        Content.FAVORITES.add(item)
                     } else {
                         Log.d(LOG_TAG, "Deleting comic #${item.id} to favorites...")
                         database.favoritesDao().delete(item)
-                        Content.FAVORITES.remove(item)
                     }
                     item.favorite = !item.favorite
                     (it as ImageButton).imageResource = when (item.favorite) {

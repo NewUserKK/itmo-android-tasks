@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 
-@Entity(tableName = "favorites")
+@Entity(tableName = "comics")
 data class XkcdComic
     @JsonCreator constructor(
             @PrimaryKey @JsonProperty("num") val id: Int,
