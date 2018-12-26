@@ -13,6 +13,8 @@ import com.learning.newuserkk.xkcdbrowser.ui.activity.ImagesListActivity
 import com.learning.newuserkk.xkcdbrowser.data.Content
 import com.learning.newuserkk.xkcdbrowser.XkcdBrowser
 import com.learning.newuserkk.xkcdbrowser.data.XkcdComic
+import com.learning.newuserkk.xkcdbrowser.data.isLatest
+import com.learning.newuserkk.xkcdbrowser.data.isOldest
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_comic_details.view.*

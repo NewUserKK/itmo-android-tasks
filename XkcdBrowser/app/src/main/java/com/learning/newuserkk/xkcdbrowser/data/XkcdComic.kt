@@ -29,9 +29,11 @@ data class XkcdComic
         const val LOG_TAG = "XkcdComic"
     }
 
-    val isLatest
-        get() = (id == Content.latestLoadedComic?.id)
-    val isOldest
-        get() = (id == 0)
+
     var favorite = false
 }
+
+val XkcdComic.isLatest
+    get() = (id == Content.latestLoadedComic?.id)
+val XkcdComic.isOldest
+    get() = (id == 0)
