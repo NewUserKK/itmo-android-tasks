@@ -107,6 +107,9 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
         }
 
         launch {
+            if (Content.FAVORITES.size == 0) {
+                loadFavorites()
+            }
             setupRecyclerView(images_list)
         }
 
@@ -140,10 +143,7 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private suspend fun setupRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
-        if (Content.FAVORITES.size == 0) {
-            loadFavorites()
-        }
+    private fun setupRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
         adapter = PictureRecyclerViewAdapter(this, Content.ITEMS, twoPane)
         recyclerView.adapter = adapter
     }
