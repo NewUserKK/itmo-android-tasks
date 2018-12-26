@@ -160,11 +160,6 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
             action = LOAD_HEAD_ACTION
         }
         startService(intent)
-        bindService(
-                Intent(this, FetchComicService::class.java),
-                serviceConnection,
-                Context.BIND_AUTO_CREATE
-        )
     }
 
     private fun fetchRemainingComics() {
