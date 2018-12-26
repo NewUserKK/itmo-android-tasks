@@ -12,14 +12,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
-class FavoritesActivity : AppCompatActivity(), CoroutineScope {
+class FavoritesActivity : AppCompatActivity() {
 
     companion object {
         const val LOG_TAG = "FavoritesActivity"
     }
 
-    private val job = Job()
-    override val coroutineContext = Dispatchers.Main + job
     private lateinit var adapter: PictureRecyclerViewAdapter
     private var twoPane = false
 
@@ -44,6 +42,5 @@ class FavoritesActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onDestroy() {
         super.onDestroy()
-        job.cancel()
     }
 }
