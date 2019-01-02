@@ -47,10 +47,6 @@ class ImagesListActivity : AppCompatActivity() {
         // either saved when orientation changed or activity destroyed
         loadedComicsCount = Content.ITEMS.size
 
-        if (loadedComicsCount != 0) {
-            adapter.notifyDataSetChanged()
-        }
-
         Log.d(LOG_TAG, "Found $loadedComicsCount already loaded comics")
         fetchAllComics()
 
