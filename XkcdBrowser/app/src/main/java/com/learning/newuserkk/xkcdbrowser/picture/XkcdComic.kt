@@ -2,12 +2,17 @@ package com.learning.newuserkk.xkcdbrowser.picture
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Parcelable
 import android.util.Log
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.learning.newuserkk.xkcdbrowser.picture.asynctask.DownloadBitmapAsyncTask
+import kotlinx.android.parcel.Parcelize
 import java.io.*
+import java.lang.IllegalStateException
 import java.net.URL
 
+@Parcelize
 data class XkcdComic
     @JsonCreator constructor(
             @JsonProperty("num") val id: Int,
@@ -24,21 +29,27 @@ data class XkcdComic
             @JsonProperty("year") val year: Int,
             @JsonProperty("month") val month: Int,
             @JsonProperty("day") val day: Int
-    ) {
+    ): Parcelable {
 
     companion object {
         const val LOG_TAG = "XkcdComic"
     }
 
-    lateinit var localFile: File
-
-    fun fetchBitmap(toPath: String): Bitmap? {
-        localFile = File(toPath)
+    @Throws(SecurityException::class, IOException::class, IllegalStateException::class)
+    fun fetchBitmap(toPath: String): Bitmap {
+        val localFile = File(toPath)
         val localPath = localFile.absolutePath
 
         if (localFile.exists()) {
             Log.d(LOG_TAG, "Loading saved picture from $localPath")
-            return BitmapFactory.decodeFile(localPath)
+            val bitmap = BitmapFactory.decodeFile(localPath)
+            if (bitmap != null) {
+                return bitmap
+            }
+            if (!localFile.delete()) {
+                throw SecurityException("Couldn't delete file $localPath")
+            }
+            Log.d(LOG_TAG, "Couldn't decode bitmap for #$id, trying to reload")
         }
 
         if (!localFile.parentFile.exists() && !localFile.parentFile.mkdirs()) {
@@ -58,8 +69,9 @@ data class XkcdComic
         inputStream.close()
         outputStream.close()
 
-        Log.d(BitmapDownloadAsyncTask.LOG_TAG,"Done fetching from $imgLink")
-        Log.d(BitmapDownloadAsyncTask.LOG_TAG, "Saved to $toPath")
+        Log.d(DownloadBitmapAsyncTask.LOG_TAG,"Done fetching from $imgLink")
+        Log.d(DownloadBitmapAsyncTask.LOG_TAG, "Saved to $toPath")
         return BitmapFactory.decodeFile(toPath)
+                ?: throw IllegalStateException("Couldn't decode loaded picture for #$id")
     }
 }

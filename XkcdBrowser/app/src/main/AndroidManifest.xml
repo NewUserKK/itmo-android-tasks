@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.learning.newuserkk.xkcdbrowser">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.learning.newuserkk.xkcdbrowser.ImagesListActivity"
+            android:name=".ImagesListActivity"
             android:label="@string/title_images_list"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -22,17 +22,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.learning.newuserkk.xkcdbrowser.ImagesDetailActivity"
+            android:name=".ImagesDetailActivity"
             android:label="@string/title_images_detail"
-            android:parentActivityName="com.learning.newuserkk.xkcdbrowser.ImagesListActivity"
+            android:parentActivityName=".ImagesListActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.learning.newuserkk.xkcdbrowser.ImagesListActivity" />
         </activity>
-        <activity android:name=".HeadComicFetchErrorActivity" />
-
-        <service android:name=".picture.PictureDownloadService" />
+        <service android:name=".picture.service.FetchComicService" />
+        <service android:name=".picture.service.DownloadBitmapService" />
     </application>
 
 </manifest>

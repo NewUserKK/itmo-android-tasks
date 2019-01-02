@@ -44,4 +44,9 @@ object Content {
         ITEMS.clear()
         ITEMS.addAll(ITEM_MAP.values)
     }
+
+    fun clear() {
+        ITEMS.clear()
+        ITEM_MAP.clear()
+    }
 }

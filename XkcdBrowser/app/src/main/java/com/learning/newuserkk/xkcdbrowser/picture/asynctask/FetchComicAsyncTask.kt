@@ -1,11 +1,12 @@
-package com.learning.newuserkk.xkcdbrowser.picture
+package com.learning.newuserkk.xkcdbrowser.picture.asynctask
 
 import android.os.AsyncTask
 import android.util.Log
 import com.learning.newuserkk.xkcdbrowser.Content
 import com.learning.newuserkk.xkcdbrowser.PictureRecyclerViewAdapter
+import com.learning.newuserkk.xkcdbrowser.picture.PictureFetcher
+import com.learning.newuserkk.xkcdbrowser.picture.XkcdComic
 import java.io.IOException
-import java.net.MalformedURLException
 import java.net.URL
 
 
