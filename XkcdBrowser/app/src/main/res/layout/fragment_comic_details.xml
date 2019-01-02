@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
         android:id="@+id/detailsComicDate"
@@ -18,7 +19,8 @@
         app:layout_constraintBottom_toTopOf="@id/detailsComicPicture"
         app:layout_constraintStart_toStartOf="@id/detailsComicPicture"
         app:layout_constraintEnd_toEndOf="@id/detailsComicPicture"
-        />
+
+        tools:text="01.02.2003"/>
 
     <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -39,7 +41,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
 
-        tools:context=".ImagesDetailFragment" />
+        tools:context=".ui.fragment.ImagesDetailFragment" />
 
     <TextView
         android:id="@+id/detailsComicDescription"
@@ -54,6 +56,7 @@
         app:layout_constraintStart_toStartOf="@id/detailsComicPicture"
         app:layout_constraintEnd_toEndOf="@id/detailsComicPicture"
         app:layout_constraintVertical_chainStyle="packed"
-        />
 
-</android.support.constraint.ConstraintLayout>
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel erat congue, iaculis diam at, euismod diam. In hac habitasse platea dictumst." />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

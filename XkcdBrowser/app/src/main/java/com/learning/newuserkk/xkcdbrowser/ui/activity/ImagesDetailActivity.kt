@@ -1,9 +1,9 @@
-package com.learning.newuserkk.xkcdbrowser
+package com.learning.newuserkk.xkcdbrowser.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import com.learning.newuserkk.xkcdbrowser.ui.fragment.ImagesDetailFragment
+import com.learning.newuserkk.xkcdbrowser.R
 
 /**
  * An activity representing a single Images detail screen. This
@@ -19,7 +19,7 @@ class ImagesDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_images_detail)
+        setContentView(R.layout.activity_detail)
 
         if (savedInstanceState == null) {
             val fragment = ImagesDetailFragment().apply {
@@ -31,17 +31,8 @@ class ImagesDetailActivity : AppCompatActivity() {
             }
 
             supportFragmentManager.beginTransaction()
-                    .add(R.id.images_detail_container, fragment)
+                    .add(R.id.detailsContainer, fragment)
                     .commit()
         }
     }
-
-    override fun onOptionsItemSelected(item: MenuItem) =
-            when (item.itemId) {
-                android.R.id.home -> {
-                    navigateUpTo(Intent(this, ImagesListActivity::class.java))
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
-            }
 }
