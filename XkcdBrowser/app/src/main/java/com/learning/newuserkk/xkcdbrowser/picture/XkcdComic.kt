@@ -42,7 +42,7 @@ data class XkcdComic
         }
 
         if (!localFile.parentFile.exists() && !localFile.parentFile.mkdirs()) {
-            throw SecurityException("Couldn't make directory $localPath")
+            throw IOException("Couldn't make directory $localPath")
         }
 
         Log.d(LOG_TAG, "Fetching image from $imgLink...")
