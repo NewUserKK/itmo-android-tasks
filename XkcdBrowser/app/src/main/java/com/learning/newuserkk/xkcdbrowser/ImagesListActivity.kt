@@ -37,12 +37,6 @@ class ImagesListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_images_list)
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(INTERNET) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(INTERNET), 1)
-            }
-        }
-
         // present only in large-screen layouts
         if (images_detail_container != null) {
             twoPane = true
