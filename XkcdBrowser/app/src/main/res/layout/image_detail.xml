@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/detailsComicDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textAlignment="center"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        android:paddingBottom="6dp"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/detailsComicPicture"
+        app:layout_constraintStart_toStartOf="@id/detailsComicPicture"
+        app:layout_constraintEnd_toEndOf="@id/detailsComicPicture"
+        />
+
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/detailsComicPicture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:contentDescription="@string/detailsComicDescription"
+
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/detailsComicDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+
+        tools:context=".ImagesDetailFragment" />
+
+    <TextView
+        android:id="@+id/detailsComicDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textAlignment="center"
+        android:paddingTop="5dp"
+
+        app:layout_constraintTop_toBottomOf="@+id/detailsComicPicture"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/detailsComicPicture"
+        app:layout_constraintEnd_toEndOf="@id/detailsComicPicture"
+        app:layout_constraintVertical_chainStyle="packed"
+        />
+
+</android.support.constraint.ConstraintLayout>
