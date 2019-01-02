@@ -72,12 +72,6 @@ class ImagesListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_images_list)
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(INTERNET) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(INTERNET), 1)
-            }
-        }
-
         // present only in large-screen layouts
         if (images_detail_container != null) {
             twoPane = true
@@ -106,10 +100,6 @@ class ImagesListActivity : AppCompatActivity() {
                 val comic = Content.getComicUrl(oldestComicId - i) ?: break
                 FetchComicService.startService(this, comic)
             }
-
-            bindService(Intent(this, FetchComicService::class.java),
-                    serviceConnection,
-                    Context.BIND_AUTO_CREATE)
         }
 
         // TODO: disabled for now, doesn't work good
