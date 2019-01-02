@@ -24,8 +24,9 @@ class ImagesDetailActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             val fragment = ImagesDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(ImagesDetailFragment.ARG_ITEM_ID,
-                            intent.getIntExtra(ImagesDetailFragment.ARG_ITEM_ID, -1))
+                    val id = intent.getIntExtra(ImagesDetailFragment.ARG_ITEM_ID, -1)
+                    assert(id != -1)
+                    putInt(ImagesDetailFragment.ARG_ITEM_ID, id)
                 }
             }
 
