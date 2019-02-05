@@ -10,12 +10,15 @@ import androidx.appcompat.app.AlertDialog
 import com.learning.newuserkk.xkcdbrowser.ui.listeners.OnSwipeTouchListener
 import com.learning.newuserkk.xkcdbrowser.R
 import com.learning.newuserkk.xkcdbrowser.ui.activity.ImagesListActivity
-import com.learning.newuserkk.xkcdbrowser.data.Content
 import com.learning.newuserkk.xkcdbrowser.XkcdBrowser
+import com.learning.newuserkk.xkcdbrowser.XkcdBrowser.Companion.database
 import com.learning.newuserkk.xkcdbrowser.data.XkcdComic
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_comic_details.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import java.lang.ref.WeakReference
 
@@ -30,7 +33,7 @@ class ImagesDetailFragment : androidx.fragment.app.Fragment() {
 
     // TODO: wrap into service
     inner class BitmapLoadCallback(rootView: View): Callback {
-        val viewRef = WeakReference(rootView)
+        private val viewRef = WeakReference(rootView)
 
         override fun onSuccess() {
             val comic = comic
@@ -79,12 +82,16 @@ class ImagesDetailFragment : androidx.fragment.app.Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        arguments?.let {
-            if (it.containsKey(ARG_ITEM_ID)) {
-                comicId = it.getInt(ARG_ITEM_ID)
-                comic = Content.ITEM_MAP[comicId]
-                activity?.title = comic?.title
-                Log.d(LOG_TAG, "Creating fragment for #$comicId, title=${comic?.title}")
+        runBlocking(Dispatchers.IO) {
+            launch {
+                arguments?.let {
+                    if (it.containsKey(ARG_ITEM_ID)) {
+                        comicId = it.getInt(ARG_ITEM_ID)
+                        comic = database.comicsDao().getById(comicId)
+                        activity?.title = comic?.title
+                        Log.d(LOG_TAG, "Creating fragment for #$comicId, title=${comic?.title}")
+                    }
+                }
             }
         }
     }
@@ -94,9 +101,6 @@ class ImagesDetailFragment : androidx.fragment.app.Fragment() {
         val rootView = inflater.inflate(R.layout.fragment_comic_details, container, false)
 
         with (rootView) {
-            if (comic == null) {
-                comic = Content.ITEM_MAP[comicId]
-            }
             comic?.let { comic ->
                 context?.let { context ->
                     Picasso.get()
@@ -104,31 +108,31 @@ class ImagesDetailFragment : androidx.fragment.app.Fragment() {
                             .tag(LOG_TAG)
                             .into(detailsComicPicture, BitmapLoadCallback(rootView))
 
-                    container?.setOnTouchListener(object : OnSwipeTouchListener(rootView.context) {
-                        override fun onSwipeRight() {
-                            Log.d(LOG_TAG, "Detected right swipe")
-                            if (!comic.isOldest) {
-                                // TODO: add proper load
-                                if (comic.id - 1 !in Content.ITEM_MAP) {
-//                                Loader.load(context, comic.id - 1)
-                                    Toast.makeText(context, getString(R.string.debug_oldestLoadedComicReachedOnSwipe), Toast.LENGTH_SHORT).show()
-                                } else {
-                                    replaceFragment(comic.id - 1)
-                                }
-                            } else {
-                                Toast.makeText(context, getString(R.string.oldestComicReachedOnSwipe), Toast.LENGTH_SHORT).show()
-                            }
-                        }
-
-                        override fun onSwipeLeft() {
-                            Log.d(LOG_TAG, "Detected left swipe")
-                            if (!comic.isLatest && comic.id + 1 in Content.ITEM_MAP) {
-                                replaceFragment(comic.id + 1)
-                            } else {
-                                Toast.makeText(context, getString(R.string.latestComicReachedOnSwipe), Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    })
+//                    container?.setOnTouchListener(object : OnSwipeTouchListener(rootView.context) {
+//                        override fun onSwipeRight() {
+//                            Log.d(LOG_TAG, "Detected right swipe")
+//                            if (!comic.isOldest) {
+//                                // TODO: add proper load
+//                                if (comic.id - 1 !in Content.ITEM_MAP) {
+////                                Loader.load(context, comic.id - 1)
+//                                    Toast.makeText(context, getString(R.string.debug_oldestLoadedComicReachedOnSwipe), Toast.LENGTH_SHORT).show()
+//                                } else {
+//                                    replaceFragment(comic.id - 1)
+//                                }
+//                            } else {
+//                                Toast.makeText(context, getString(R.string.oldestComicReachedOnSwipe), Toast.LENGTH_SHORT).show()
+//                            }
+//                        }
+//
+//                        override fun onSwipeLeft() {
+//                            Log.d(LOG_TAG, "Detected left swipe")
+//                            if (!comic.isLatest && comic.id + 1 in Content.ITEM_MAP) {
+//                                replaceFragment(comic.id + 1)
+//                            } else {
+//                                Toast.makeText(context, getString(R.string.latestComicReachedOnSwipe), Toast.LENGTH_SHORT).show()
+//                            }
+//                        }
+//                    })
                 }
             }
         }

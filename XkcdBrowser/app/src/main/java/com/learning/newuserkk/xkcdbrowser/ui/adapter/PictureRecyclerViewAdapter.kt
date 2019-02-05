@@ -1,33 +1,24 @@
 package com.learning.newuserkk.xkcdbrowser.ui.adapter
 
-import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.learning.newuserkk.xkcdbrowser.R
-import com.learning.newuserkk.xkcdbrowser.ui.activity.ImagesDetailActivity
-import com.learning.newuserkk.xkcdbrowser.data.Content
 import com.learning.newuserkk.xkcdbrowser.XkcdBrowser.Companion.database
 import com.learning.newuserkk.xkcdbrowser.data.XkcdComic
-import com.learning.newuserkk.xkcdbrowser.ui.fragment.ImagesDetailFragment
 import kotlinx.android.synthetic.main.item_list_comics.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.jetbrains.anko.imageResource
+import kotlin.coroutines.CoroutineContext
 
 
-open class PictureRecyclerViewAdapter(private val parentActivity: AppCompatActivity,
-                                      private val values: MutableList<XkcdComic>,
-                                      private val twoPane: Boolean) :
-        RecyclerView.Adapter<PictureRecyclerViewAdapter.ViewHolder>() {
+open class PictureRecyclerViewAdapter(private val values: MutableList<XkcdComic>,
+                                      private val onClickListener: View.OnClickListener) :
+        RecyclerView.Adapter<PictureRecyclerViewAdapter.ViewHolder>(), CoroutineScope {
 
 
     inner class ViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
@@ -42,30 +33,9 @@ open class PictureRecyclerViewAdapter(private val parentActivity: AppCompatActiv
     }
 
 
-    private val onClickListener: View.OnClickListener
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main
 
-    init {
-        onClickListener = View.OnClickListener { view ->
-            val item = view.tag as XkcdComic
-            if (twoPane) {
-                // передаём во фрагмент имеющийся список
-                val fragment = ImagesDetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putInt(ImagesDetailFragment.ARG_ITEM_ID, item.id)
-                    }
-                }
-                parentActivity.supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.detailsContainer, fragment)
-                        .commit()
-            } else {
-                val intent = Intent(view.context, ImagesDetailActivity::class.java).apply {
-                    putExtra(ImagesDetailFragment.ARG_ITEM_ID, item.id)
-                }
-                view.context.startActivity(intent)
-            }
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -78,38 +48,40 @@ open class PictureRecyclerViewAdapter(private val parentActivity: AppCompatActiv
         holder.apply {
             idView.text = idView.context.resources.getString(R.string.comicId, item.id)
             contentView.text = item.title
-            restoreFavoriteState(item)
 
-            favoriteButtonView.setOnClickListener {
-                Log.d(LOG_TAG, "At favorite listener")
-                (parentActivity as CoroutineScope).launch {
-                    if (!item.favorite) {
-                        Log.d(LOG_TAG, "Adding comic #${item.id} to favorites...")
-                        database.favoritesDao().insert(item)
-                    } else {
-                        Log.d(LOG_TAG, "Deleting comic #${item.id} to favorites...")
-                        database.favoritesDao().delete(item)
-                    }
-                    item.favorite = !item.favorite
-                    (it as ImageButton).imageResource = when (item.favorite) {
+            launch(Dispatchers.IO) {
+                val favorite = database.comicsDao().getFavorites().contains(item)
+                withContext(Dispatchers.Main) {
+                    favoriteButtonView.imageResource = when (favorite) {
                         true -> android.R.drawable.btn_star_big_on
                         false -> android.R.drawable.btn_star_big_off
                     }
                 }
             }
 
+            favoriteButtonView.setOnClickListener {
+                Log.d(LOG_TAG, "At favorite listener")
+                launch(Dispatchers.IO) {
+                    val favorite = database.comicsDao().getFavorites().contains(item)
+                    if (!favorite) {
+                        Log.d(LOG_TAG, "Adding comic #${item.id} to favorites...")
+                        database.comicsDao().insert(item)
+                    } else {
+                        Log.d(LOG_TAG, "Deleting comic #${item.id} to favorites...")
+                        database.comicsDao().delete(item)
+                    }
+//                    item.favorite = !item.favorite
+                    withContext(Dispatchers.Main) {
+                        (it as ImageButton).imageResource = when (favorite) {
+                            true -> android.R.drawable.btn_star_big_on
+                            false -> android.R.drawable.btn_star_big_off
+                        }
+                    }
+                }
+            }
+
             itemView.tag = item
             itemView.setOnClickListener(onClickListener)
-        }
-    }
-
-    private fun ViewHolder.restoreFavoriteState(item: XkcdComic) {
-        item.favorite = (item in Content.FAVORITES)
-        favoriteButtonView.apply {
-            imageResource = when (item.favorite) {
-                true -> android.R.drawable.btn_star_big_on
-                false -> android.R.drawable.btn_star_big_off
-            }
         }
     }
 

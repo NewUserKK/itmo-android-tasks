@@ -9,24 +9,31 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.OnLifecycleEvent
 import com.learning.newuserkk.xkcdbrowser.ui.adapter.PictureRecyclerViewAdapter
 import com.learning.newuserkk.xkcdbrowser.R
-import com.learning.newuserkk.xkcdbrowser.data.Content
 import com.learning.newuserkk.xkcdbrowser.XkcdBrowser
+import com.learning.newuserkk.xkcdbrowser.XkcdBrowser.Companion.database
 import com.learning.newuserkk.xkcdbrowser.data.XkcdComic
 import com.learning.newuserkk.xkcdbrowser.service.*
 import com.learning.newuserkk.xkcdbrowser.service.common.LoadCallback
+import com.learning.newuserkk.xkcdbrowser.ui.fragment.ImagesDetailFragment
 import kotlinx.android.synthetic.main.activity_list.*
 import kotlinx.android.synthetic.main.list_comics.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+
+//const val LOADED_COMICS_COUNT_EXTRA = "com.learning.newuserkk.xkcdbrowser.ui.activity.extra.loadedComicsCount"
 
 
 class ImagesListActivity : AppCompatActivity(), CoroutineScope {
@@ -55,9 +62,26 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
 //                    getString(R.string.loadComicJsonErrorMessage),
 //                    Toast.LENGTH_SHORT)
 //                    .show()
+            reloadButton.isEnabled = true
         }
     }
 
+    inner class LoadEndComicCallback: LoadCallback<XkcdComic> {
+        override fun onLoad(item: XkcdComic) {
+            addComic(item)
+            comics.sortByDescending { it.id }
+            notifyAdapter()
+            reloadButton.isEnabled = true
+        }
+
+        override fun onException(error: Throwable) {
+            Log.e(LOG_TAG, error.message)
+//            Toast.makeText(this@ImagesListActivity,
+//                    getString(R.string.loadComicJsonErrorMessage),
+//                    Toast.LENGTH_SHORT)
+//                    .show()
+        }
+    }
 
 
     companion object {
@@ -80,6 +104,7 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
             this@ImagesListActivity.service = binder?.service
             binder?.setHeadCallback(LoadHeadComicCallback())
             binder?.setRegularCallback(LoadRegularComicCallback())
+            binder?.setEndCallback(LoadEndComicCallback())
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -89,28 +114,29 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private lateinit var adapter: PictureRecyclerViewAdapter
-    private var loadedComicsCount = 0
+    private val comics = mutableListOf<XkcdComic>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
-
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(INTERNET) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(INTERNET), 1)
-            }
-        }
 
         // present only in large-screen layouts
         if (detailsContainer != null) {
             twoPane = true
         }
 
-        launch {
-            setupRecyclerView(images_list)
-        }
+        setupRecyclerView(images_list)
 
-        loadedComicsCount = Content.ITEMS.size
+        launch {
+            if (savedInstanceState == null) {
+                Log.d(LOG_TAG, "Fetching comics from the Internet")
+                fetchStartComics()
+
+            } else {
+                comics.addAll(database.comicsDao().getAll())
+                Log.d(LOG_TAG, "Loaded ${comics.size} comics from database")
+            }
+        }
 
         bindService(
                 Intent(this, FetchComicService::class.java),
@@ -118,41 +144,44 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
                 Context.BIND_AUTO_CREATE
         )
 
-        Log.d(LOG_TAG, "Found $loadedComicsCount already loaded comics")
-
-        if (loadedComicsCount == 0) {
-            fetchStartComics()
-        }
-
         addComicsButton.text = getString(R.string.getMoreComics, COMICS_TO_ADD)
         addComicsButton.setOnClickListener {
-            val oldestComicId = Content.oldestLoadedComic?.id ?: return@setOnClickListener
+            val oldestComicId = comics.lastOrNull()?.id ?: return@setOnClickListener
             fetchComics(oldestComicId, COMICS_TO_ADD)
         }
 
         // TODO: fix bug with multiple clicks
         reloadButton.setOnClickListener {
             FetchComicService.cancelAll {
-                Content.clear()
+                comics.clear()
                 adapter.notifyDataSetChanged()
                 fetchStartComics()
             }
         }
     }
 
-    private suspend fun setupRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
-        if (Content.FAVORITES.size == 0) {
-            loadFavorites()
-        }
-        adapter = PictureRecyclerViewAdapter(this, Content.ITEMS, twoPane)
-        recyclerView.adapter = adapter
-    }
+    private fun setupRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
+        adapter = PictureRecyclerViewAdapter(comics, View.OnClickListener { view ->
+            val item = view.tag as XkcdComic
+            if (twoPane) {
+                // передаём во фрагмент имеющийся список
+                val fragment = ImagesDetailFragment().apply {
+                    arguments = Bundle().apply {
+                        putInt(ImagesDetailFragment.ARG_ITEM_ID, item.id)
+                    }
+                }
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.detailsContainer, fragment)
+                        .commit()
+            } else {
+                val intent = Intent(view.context, ImagesDetailActivity::class.java).apply {
+                    putExtra(ImagesDetailFragment.ARG_ITEM_ID, item.id)
+                }
+                view.context.startActivity(intent)
+            }
+        })
 
-    private suspend fun loadFavorites() {
-        Log.d(LOG_TAG, "Fetching favorites from db...")
-        Content.FAVORITES.clear()
-        Content.FAVORITES.addAll(XkcdBrowser.database.favoritesDao().getAll())
-        Log.d(LOG_TAG, "OK")
+        recyclerView.adapter = adapter
     }
 
     private fun fetchStartComics() {
@@ -160,15 +189,11 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
             action = LOAD_HEAD_ACTION
         }
         startService(intent)
-        bindService(
-                Intent(this, FetchComicService::class.java),
-                serviceConnection,
-                Context.BIND_AUTO_CREATE
-        )
+        reloadButton.isEnabled = false
     }
 
     private fun fetchRemainingComics() {
-        val oldestComicId = Content.oldestLoadedComic?.id ?: return
+        val oldestComicId = comics.lastOrNull()?.id ?: return
         Log.d(LOG_TAG, "Fetching remaining comics from $oldestComicId")
         fetchComics(oldestComicId, START_COUNT)
     }
@@ -184,8 +209,7 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
 
     private fun addComic(comic: XkcdComic) {
         Log.d(LOG_TAG, "Got #${comic.id}")
-        Content.addItem(comic)
-        notifyAdapter()
+        comics.add(comic)
     }
 
     fun showComicsFetchErrorDialog() {
@@ -225,6 +249,15 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        launch(Dispatchers.IO) {
+            comics.forEach {
+                database.comicsDao().insert(it)
+            }
         }
     }
 

@@ -25,13 +25,5 @@ data class XkcdComic
             @ColumnInfo @JsonProperty("day") val day: Int
     ) {
 
-    companion object {
-        const val LOG_TAG = "XkcdComic"
-    }
-
-    val isLatest
-        get() = (id == Content.latestLoadedComic?.id)
-    val isOldest
-        get() = (id == 0)
-    var favorite = false
+    @ColumnInfo var favorite = false
 }

@@ -16,14 +16,17 @@ import com.learning.newuserkk.xkcdbrowser.service.common.ServiceResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 import java.util.*
 
 
-const val LOAD_HEAD_ACTION = "com.learning.newuserkk.xkcdbrowser.picture.services.action.loadHead"
-const val LOAD_REGULAR_ACTION = "com.learning.newuserkk.xkcdbrowser.picture.services.action.loadRegular"
+const val LOAD_HEAD_ACTION = "com.learning.newuserkk.xkcdbrowser.services.action.loadHead"
+const val LOAD_REGULAR_ACTION = "com.learning.newuserkk.xkcdbrowser.services.action.loadRegular"
+const val LOAD_END_ACTION = "com.learning.newuserkk.xkcdbrowser.services.action.loadEnd"
 
-const val FROM_COMIC_ID_EXTRA = "com.learning.newuserkk.xkcdbrowser.picture.services.extra.fromComicId"
-const val COMICS_AMOUNT_TO_LOAD_EXTRA = "com.learning.newuserkk.xkcdbrowser.picture.services.extra.comicsAmountToLoad"
+
+const val FROM_COMIC_ID_EXTRA = "com.learning.newuserkk.xkcdbrowser.services.extra.fromComicId"
+const val COMICS_AMOUNT_TO_LOAD_EXTRA = "com.learning.newuserkk.xkcdbrowser.services.extra.comicsAmountToLoad"
 
 
 class FetchComicService : Service() {
@@ -38,6 +41,12 @@ class FetchComicService : Service() {
         fun setRegularCallback(callback: LoadCallback<XkcdComic>) {
             Log.d(LOG_TAG, "Set regular comic callback")
             service.regularCallback = callback
+            processQueue(callback)
+        }
+
+        fun setEndCallback(callback: LoadCallback<XkcdComic>) {
+            Log.d(LOG_TAG, "Set regular comic callback")
+            service.endCallback = callback
             processQueue(callback)
         }
 
@@ -74,6 +83,7 @@ class FetchComicService : Service() {
     val responses = ArrayDeque<ServiceResponse<XkcdComic>>()
     var headCallback: LoadCallback<XkcdComic>? = null
     var regularCallback: LoadCallback<XkcdComic>? = null
+    var endCallback: LoadCallback<XkcdComic>? = null
 
     private val retrofitService = XkcdBrowser.retrofit.create(XkcdApiService::class.java)
 
@@ -87,8 +97,14 @@ class FetchComicService : Service() {
                     val count = getIntExtra(COMICS_AMOUNT_TO_LOAD_EXTRA, -1)
                     if (from != Int.MIN_VALUE) {
                         loadRegularComic(from, count)
-                    } else throw IllegalArgumentException("No from id in intent")
+                    } else
+                        throw IllegalArgumentException("No from id in intent")
                 }
+
+//                LOAD_END_ACTION -> {
+//                    val id = getIntExtra(FROM_COMIC_ID_EXTRA, Int.MIN_VALUE)
+//                    loadEndComic(id)
+//                }
 
                 else -> throw IllegalArgumentException("Unknown action, " +
                         "must be one of FetchComicService action constants")
@@ -106,10 +122,15 @@ class FetchComicService : Service() {
 
     private fun loadRegularComic(from: Int, count: Int = -1) {
         Log.d(LOG_TAG, "Loading $count comics from $from")
-        for (i in 0 until count) {
+        for (i in 0 until count - 1) {
             makeCall(retrofitService.getComic(from - i), LOAD_REGULAR_ACTION)
         }
+        makeCall(retrofitService.getComic(from - count), LOAD_END_ACTION)
     }
+//
+//    private fun loadEndComic(id: Int) {
+//        Log.d(LOG_TAG, "Loading end comic")
+//    }
 
     private fun makeCall(call: Call<XkcdComic>, action: String) {
         val callId = id++
@@ -132,7 +153,7 @@ class FetchComicService : Service() {
                     } else {
                         Log.d(LOG_TAG, "URL: ${call.request().url()}")
                         ServiceResponse<XkcdComic>(null,
-                                UnknownError("Got bad response, code ${response.code()}"))
+                                IOException("Got bad response, code ${response.code()}"))
                     }
                     deliver(serviceResponse, getCallback(action))
                 }
@@ -154,20 +175,26 @@ class FetchComicService : Service() {
         return when (action) {
             LOAD_HEAD_ACTION -> headCallback
             LOAD_REGULAR_ACTION -> regularCallback
+            LOAD_END_ACTION -> endCallback
             else -> throw IllegalArgumentException("Unknown action, " +
                     "must be one of FetchComicService action constants")
         }
     }
 
     override fun onBind(intent: Intent?): IBinder? {
-        Log.d(LOG_TAG, "Binded service")
+        Log.d(LOG_TAG, "Bind service")
         return ServiceBinder(this)
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        Log.d(LOG_TAG, "Unbinded service")
+        Log.d(LOG_TAG, "Unbind service")
+        clearCallbacks()
+        return super.onUnbind(intent)
+    }
+
+    private fun clearCallbacks() {
         headCallback = null
         regularCallback = null
-        return super.onUnbind(intent)
+        endCallback = null
     }
 }

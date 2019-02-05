@@ -6,6 +6,6 @@ import androidx.room.RoomDatabase
 @Database(entities = [XkcdComic::class], version = 1)
 abstract class AppDatabase: RoomDatabase() {
 
-    abstract fun favoritesDao(): FavoritesDao
+    abstract fun comicsDao(): ComicsDao
 
 }
