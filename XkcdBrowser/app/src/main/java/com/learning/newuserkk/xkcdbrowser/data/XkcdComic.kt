@@ -8,22 +8,38 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 @Entity(tableName = "comics")
 data class XkcdComic
-    @JsonCreator constructor(
-            @PrimaryKey @JsonProperty("num") val id: Int,
+    constructor(
+            @PrimaryKey val id: Int,
 
-            @ColumnInfo @JsonProperty("title") val title: String,
-            @ColumnInfo @JsonProperty("safe_title") val safeTitle: String?,
-            @ColumnInfo @JsonProperty("link") val link: String?,
-            @ColumnInfo @JsonProperty("img") val imgLink: String,
+            @ColumnInfo val title: String,
+            @ColumnInfo val safeTitle: String?,
+            @ColumnInfo val link: String?,
+            @ColumnInfo val imgLink: String,
 
-            @ColumnInfo @JsonProperty("alt") val alt: String?,
-            @ColumnInfo @JsonProperty("news") val news: String?,
-            @ColumnInfo @JsonProperty("transcript") val transcript: String?,
+            @ColumnInfo val alt: String?,
+            @ColumnInfo val news: String?,
+            @ColumnInfo val transcript: String?,
 
-            @ColumnInfo @JsonProperty("year") val year: Int,
-            @ColumnInfo @JsonProperty("month") val month: Int,
-            @ColumnInfo @JsonProperty("day") val day: Int
+            @ColumnInfo val year: Int,
+            @ColumnInfo val month: Int,
+            @ColumnInfo val day: Int,
+            @ColumnInfo var favorite: Boolean
     ) {
 
-    @ColumnInfo var favorite = false
+    @JsonCreator constructor(
+            @JsonProperty("num") id: Int,
+
+            @JsonProperty("title") title: String,
+            @JsonProperty("safe_title") safeTitle: String?,
+            @JsonProperty("link") link: String?,
+            @JsonProperty("img") imgLink: String,
+
+            @JsonProperty("alt") alt: String?,
+            @JsonProperty("news") news: String?,
+            @JsonProperty("transcript") transcript: String?,
+
+            @JsonProperty("year") year: Int,
+            @JsonProperty("month") month: Int,
+            @JsonProperty("day") day: Int
+    ): this(id, title, safeTitle, link, imgLink, alt, news, transcript, year, month, day, false)
 }

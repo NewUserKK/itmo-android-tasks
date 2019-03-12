@@ -34,4 +34,9 @@ class ImagesDetailActivity : AppCompatActivity() {
                     .commit()
         }
     }
+
+    override fun onNavigateUp(): Boolean {
+
+        return super.onNavigateUp()
+    }
 }

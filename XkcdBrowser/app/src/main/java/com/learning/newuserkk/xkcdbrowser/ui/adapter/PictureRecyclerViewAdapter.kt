@@ -49,30 +49,26 @@ open class PictureRecyclerViewAdapter(private val values: MutableList<XkcdComic>
             idView.text = idView.context.resources.getString(R.string.comicId, item.id)
             contentView.text = item.title
 
-            launch(Dispatchers.IO) {
-                val favorite = database.comicsDao().getFavorites().contains(item)
-                withContext(Dispatchers.Main) {
-                    favoriteButtonView.imageResource = when (favorite) {
-                        true -> android.R.drawable.btn_star_big_on
-                        false -> android.R.drawable.btn_star_big_off
-                    }
-                }
+            favoriteButtonView.imageResource = when (item.favorite) {
+                true -> android.R.drawable.btn_star_big_on
+                false -> android.R.drawable.btn_star_big_off
             }
 
             favoriteButtonView.setOnClickListener {
                 Log.d(LOG_TAG, "At favorite listener")
                 launch(Dispatchers.IO) {
-                    val favorite = database.comicsDao().getFavorites().contains(item)
-                    if (!favorite) {
-                        Log.d(LOG_TAG, "Adding comic #${item.id} to favorites...")
-                        database.comicsDao().insert(item)
-                    } else {
-                        Log.d(LOG_TAG, "Deleting comic #${item.id} to favorites...")
-                        database.comicsDao().delete(item)
-                    }
-//                    item.favorite = !item.favorite
-                    withContext(Dispatchers.Main) {
-                        (it as ImageButton).imageResource = when (favorite) {
+                    item.favorite = !item.favorite
+//                    if (item.favorite) {
+//                        Log.d(LOG_TAG, "Adding comic #${item.id} to favorites...")
+                    database.comicsDao().update(item)
+//                        Log.d(LOG_TAG, "#${item.id}: adding ok")
+//                    } else {
+//                        Log.d(LOG_TAG, "Deleting comic #${item.id} from favorites...")
+//                        database.comicsDao().delete(item)
+//                        Log.d(LOG_TAG, "#${item.id}: deleting ok")
+//                    }
+                    launch(Dispatchers.Main) {
+                        (it as ImageButton).imageResource = when (item.favorite) {
                             true -> android.R.drawable.btn_star_big_on
                             false -> android.R.drawable.btn_star_big_off
                         }

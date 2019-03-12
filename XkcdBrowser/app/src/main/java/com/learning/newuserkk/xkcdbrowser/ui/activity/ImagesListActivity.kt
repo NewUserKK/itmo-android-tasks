@@ -131,6 +131,8 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
             if (savedInstanceState == null) {
                 Log.d(LOG_TAG, "Fetching comics from the Internet")
                 fetchStartComics()
+                reloadButton.isEnabled = false
+
 
             } else {
                 comics.addAll(database.comicsDao().getAll())
@@ -147,6 +149,7 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
         addComicsButton.text = getString(R.string.getMoreComics, COMICS_TO_ADD)
         addComicsButton.setOnClickListener {
             val oldestComicId = comics.lastOrNull()?.id ?: return@setOnClickListener
+            reloadButton.isEnabled = false
             fetchComics(oldestComicId, COMICS_TO_ADD)
         }
 
@@ -155,6 +158,7 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
             FetchComicService.cancelAll {
                 comics.clear()
                 adapter.notifyDataSetChanged()
+                reloadButton.isEnabled = false
                 fetchStartComics()
             }
         }
@@ -189,7 +193,6 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
             action = LOAD_HEAD_ACTION
         }
         startService(intent)
-        reloadButton.isEnabled = false
     }
 
     private fun fetchRemainingComics() {
@@ -252,8 +255,8 @@ class ImagesListActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         launch(Dispatchers.IO) {
             comics.forEach {
                 database.comicsDao().insert(it)
